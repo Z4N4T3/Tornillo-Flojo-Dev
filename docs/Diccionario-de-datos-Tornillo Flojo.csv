@@ -1,0 +1,127 @@
+Tabla,Campo,Tipo de dato,Descripcion,Restricciones
+estado,id,INT,Identificador unico del estado,PK; NOT NULL
+estado,nombre,VARCHAR(50),Nombre del estado,NOT NULL
+departamento,id,INT,Identificador del departamento,PK; NOT NULL
+departamento,nombre,VARCHAR(100),Nombre del departamento,NOT NULL
+municipio,id,INT,Identificador del municipio,PK; NOT NULL
+municipio,nombre,VARCHAR(100),Nombre del municipio,NOT NULL
+municipio,id_dep,INT,Relacion con departamento,FK (departamento)
+barrio,id,INT,Identificador del barrio,PK; NOT NULL
+barrio,nombre,VARCHAR(100),Nombre del barrio,NOT NULL
+barrio,id_mun,INT,Relacion con municipio,FK (municipio)
+permiso,id,INT,Identificador del permiso,PK; NOT NULL
+permiso,nombre,VARCHAR(100),Nombre unico del permiso,UNIQUE; NOT NULL
+permiso,descripcion,VARCHAR(200),Descripcion del permiso,NULL
+rol,id,INT,Identificador del rol,PK; NOT NULL
+rol,nombre,VARCHAR(50),Nombre unico del rol,UNIQUE; NOT NULL
+rol,descripcion,VARCHAR(200),Descripcion del rol,NULL
+rol,id_estado,INT,Estado del rol,FK (estado)
+rol_permiso,id_rol,INT,Rol asociado,PK; FK (rol); NOT NULL
+rol_permiso,id_permiso,INT,Permiso asociado,PK; FK (permiso); NOT NULL
+cargo,id,INT,Identificador del cargo,PK; NOT NULL
+cargo,nombre,VARCHAR(100),Nombre del cargo,NOT NULL
+cargo,descripcion,VARCHAR(500),Descripcion del cargo,NULL
+cargo,salario_base,"DECIMAL(18,2)",Salario base,NULL
+cargo,id_estado,INT,Estado del cargo,FK (estado)
+empleado,id,INT,Identificador del empleado,PK; NOT NULL
+empleado,nombre1,VARCHAR(50),Primer nombre,NOT NULL
+empleado,nombre2,VARCHAR(50),Segundo nombre,NULL
+empleado,apellido1,VARCHAR(50),Primer apellido,NOT NULL
+empleado,apellido2,VARCHAR(50),Segundo apellido,NULL
+empleado,identificacion,VARCHAR(20),Identificacion unica,UNIQUE; NOT NULL
+empleado,genero,CHAR(1),Genero,NULL
+empleado,id_cargo,INT,Cargo,FK (cargo)
+empleado,id_estado,INT,Estado,FK (estado)
+usuario,id,INT,Identificador del usuario,PK; NOT NULL
+usuario,username,VARCHAR(50),Nombre de usuario,UNIQUE; NOT NULL
+usuario,password_hash,VARCHAR(256),Contrasena encriptada,NOT NULL
+usuario,id_empleado,INT,Empleado,FK (empleado)
+usuario,id_rol,INT,Rol o Perfil base del usuario,FK (rol)
+usuario,id_estado,INT,Estado,FK (estado)
+usuario,fecha_creacion,DATETIME,Fecha de creacion,DEFAULT GETDATE()
+usuario_permiso,id_usuario,INT,Usuario asociado,PK; FK (usuario); NOT NULL
+usuario_permiso,id_permiso,INT,Permiso asociado,PK; FK (permiso); NOT NULL
+cliente,id,INT,Identificador del cliente,PK; NOT NULL
+cliente,nombre1,VARCHAR(50),Primer nombre,NOT NULL
+cliente,nombre2,VARCHAR(50),Segundo nombre,NULL
+cliente,apellido1,VARCHAR(50),Primer apellido,NOT NULL
+cliente,apellido2,VARCHAR(50),Segundo apellido,NULL
+cliente,identificacion,VARCHAR(20),Documento,UNIQUE
+cliente,telefono,VARCHAR(20),Telefono,NULL
+cliente,email,VARCHAR(100),Correo,NULL
+cliente,id_barrio,INT,Ubicacion,FK (barrio)
+cliente,fecha_registro,DATETIME,Fecha de registro,DEFAULT GETDATE()
+vehiculo_marca,id,INT,Identificador de la marca,PK; NOT NULL
+vehiculo_marca,nombre,VARCHAR(100),Nombre de la marca,NOT NULL
+vehiculo_modelo,id,INT,Identificador del modelo,PK; NOT NULL
+vehiculo_modelo,nombre,VARCHAR(100),Nombre del modelo,NOT NULL
+vehiculo_modelo,id_marca,INT,Marca del vehiculo,FK (vehiculo_marca)
+producto_categoria,id,INT,Identificador de la categoria,PK; NOT NULL
+producto_categoria,nombre,VARCHAR(100),Nombre de la categoria,NOT NULL
+producto,id,INT,Identificador del producto,PK; NOT NULL
+producto,codigo_parte,VARCHAR(50),Codigo unico,UNIQUE
+producto,nombre,VARCHAR(200),Nombre del producto,NOT NULL
+producto,descripcion,VARCHAR(MAX),Descripcion,NULL
+producto,stock_actual,INT,Stock disponible,DEFAULT 0
+producto,stock_minimo,INT,Stock minimo,DEFAULT 5
+producto,precio_venta,"DECIMAL(18,2)",Precio de venta,NOT NULL
+producto,id_categoria,INT,Categoria,FK (producto_categoria)
+producto,id_estado,INT,Estado,FK (estado)
+proveedor,id,INT,Identificador del proveedor,PK; NOT NULL
+proveedor,nombre_comercial,VARCHAR(200),Nombre comercial,NOT NULL
+proveedor,ruc,VARCHAR(20),RUC del proveedor,UNIQUE
+proveedor,telefono,VARCHAR(20),Telefono de contacto,NULL
+proveedor,email,VARCHAR(100),Correo electronico,NULL
+proveedor,direccion,VARCHAR(500),Direccion fisica,NULL
+proveedor,id_estado,INT,Estado del proveedor,FK (estado)
+compra,id,BIGINT,Identificador de la compra,PK; NOT NULL
+compra,numero_factura_proveedor,VARCHAR(50),Numero de factura,NOT NULL
+compra,id_proveedor,INT,Proveedor asociado,FK (proveedor)
+compra,fecha_compra,DATETIME,Fecha de la compra,DEFAULT GETDATE()
+compra,total,"DECIMAL(18,2)",Total de la compra,NOT NULL
+compra,id_estado,INT,Estado de la compra,FK (estado)
+compra_detalle,id,BIGINT,Identificador del detalle,PK; NOT NULL
+compra_detalle,id_compra,BIGINT,Compra asociada,FK (compra)
+compra_detalle,id_producto,INT,Producto comprado,FK (producto)
+compra_detalle,cantidad,INT,Cantidad comprada,NOT NULL
+compra_detalle,costo_unitario,"DECIMAL(18,2)",Costo por unidad,NOT NULL
+compra_detalle,subtotal,AS (cantidad * costo_unitario),Subtotal calculado,COMPUTED
+producto_compatibilidad,id,INT,Identificador,PK; NOT NULL
+producto_compatibilidad,id_producto,INT,Producto,FK (producto)
+producto_compatibilidad,id_modelo,INT,Modelo de vehiculo,FK (vehiculo_modelo)
+producto_compatibilidad,anio_inicio,INT,Ano inicial de compatibilidad,NOT NULL
+producto_compatibilidad,anio_fin,INT,Ano final de compatibilidad,NOT NULL
+tipo_movimiento,id,INT,Identificador del tipo,PK; NOT NULL
+tipo_movimiento,nombre,VARCHAR(50),Nombre del tipo,NOT NULL
+tipo_movimiento,multiplicador,INT,1 para entrada y -1 para salida,NOT NULL
+movimiento,id,BIGINT,Identificador del movimiento,PK; NOT NULL
+movimiento,id_producto,INT,Producto movido,FK (producto)
+movimiento,id_tipo_movimiento,INT,Tipo de movimiento,FK (tipo_movimiento)
+movimiento,cantidad,INT,Cantidad movida,NOT NULL
+movimiento,costo_unitario,"DECIMAL(18,2)",Costo del movimiento,NOT NULL
+movimiento,stock_resultante,INT,Stock despues del movimiento,NOT NULL
+movimiento,fecha_movimiento,DATETIME,Fecha del movimiento,DEFAULT GETDATE()
+movimiento,id_usuario,INT,Usuario responsable,FK (usuario)
+movimiento,referencia,VARCHAR(100),Referencia externa,NULL
+turno_caja,id,INT,Identificador del turno,PK; NOT NULL
+turno_caja,id_usuario,INT,Cajero responsable,FK (usuario)
+turno_caja,fecha_apertura,DATETIME,Apertura del turno,DEFAULT GETDATE()
+turno_caja,fecha_cierre,DATETIME,Cierre del turno,NULL
+turno_caja,monto_inicial,"DECIMAL(18,2)",Monto de apertura,NOT NULL
+turno_caja,monto_final,"DECIMAL(18,2)",Monto al cierre,NULL
+turno_caja,id_estado,INT,Estado del turno,FK (estado)
+factura,id,BIGINT,Identificador,PK; NOT NULL
+factura,numero_factura,VARCHAR(50),Numero de factura,UNIQUE; NOT NULL
+factura,id_cliente,INT,Cliente,FK (cliente)
+factura,id_turno_caja,INT,Turno de caja,FK (turno_caja)
+factura,subtotal,"DECIMAL(18,2)",Subtotal,NOT NULL
+factura,impuesto,"DECIMAL(18,2)",Impuesto,NOT NULL
+factura,total,"DECIMAL(18,2)",Total,NOT NULL
+factura,fecha_emision,DATETIME,Fecha de emision,DEFAULT GETDATE()
+factura,id_estado,INT,Estado de la factura,FK (estado)
+factura_detalle,id,BIGINT,Identificador del detalle,PK; NOT NULL
+factura_detalle,id_factura,BIGINT,Factura asociada,FK (factura)
+factura_detalle,id_producto,INT,Producto vendido,FK (producto)
+factura_detalle,cantidad,INT,Cantidad vendida,NOT NULL
+factura_detalle,precio_unitario,"DECIMAL(18,2)",Precio por unidad,NOT NULL
+factura_detalle,subtotal,AS (cantidad * precio_unitario),Subtotal calculado,COMPUTED

@@ -1,0 +1,81 @@
+flowchart LR
+
+%% ENTITIES
+estado[Estado]
+departamento[Departamento]
+municipio[Municipio]
+barrio[Barrio]
+cargo[Cargo]
+empleado[Empleado]
+usuario[Usuario]
+cliente[Cliente]
+producto[Producto]
+categoria[ProductoCategoria]
+proveedor[Proveedor]
+compra[Compra]
+compra_detalle[CompraDetalle]
+factura[Factura]
+factura_detalle[FacturaDetalle]
+kardex[Kardex]
+tipo_movimiento[TipoMovimiento]
+turno_caja[TurnoCaja]
+vehiculo_marca[VehiculoMarca]
+vehiculo_modelo[VehiculoModelo]
+producto_compatibilidad[ProductoCompatibilidad]
+
+%% RELATIONSHIPS (diamonds simulated)
+r1{Tiene}
+r2{Pertenece}
+r3{Ubica}
+r4{Clasifica}
+r5{Compra}
+r6{Detalle}
+r7{Genera}
+r8{Incluye}
+r9{Movimiento}
+r10{Opera}
+r11{Compatibilidad}
+
+%% CORE RELATIONSHIPS
+
+departamento --> r1 --> municipio
+municipio --> r2 --> barrio
+barrio --> r3 --> cliente
+
+categoria --> r4 --> producto
+
+proveedor --> r5 --> compra
+compra --> r6 --> compra_detalle
+producto --> r6
+
+cliente --> r7 --> factura
+turno_caja --> r7
+
+factura --> r8 --> factura_detalle
+producto --> r8
+
+producto --> r9 --> kardex
+tipo_movimiento --> r9
+usuario --> r9
+
+usuario --> r10 --> turno_caja
+
+vehiculo_marca --> vehiculo_modelo
+vehiculo_modelo --> r11 --> producto_compatibilidad
+producto --> r11
+
+%% EMPLOYEE / USER
+
+cargo --> empleado
+empleado --> usuario
+
+%% STATES
+
+estado --> cargo
+estado --> empleado
+estado --> usuario
+estado --> producto
+estado --> proveedor
+estado --> compra
+estado --> turno_caja
+estado --> factura
