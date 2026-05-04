@@ -25,6 +25,13 @@ Este archivo sirve como "memoria" y bitácora de las decisiones arquitectónicas
   * Se actualizó `Diccionario-de-datos-Tornillo Flojo.csv` incluyendo la columna "Restricciones" (PK, FK, NOT NULL).
 * **Desnormalizaciones aceptadas:** Se decidió mantener `stock_actual` en `producto` y los `totales` en facturas por razones de rendimiento (práctica común en sistemas POS), documentándolo debidamente.
 
+### [Mayo 2026] Soporte Multi-Sucursal
+* **Contexto:** Se solicitó que el sistema soporte una o varias sucursales físicas de la tienda.
+* **Decisión:** Se creó la tabla `sucursal` como entidad fundacional (antes de Security & HR) que se enlaza a `barrio` para reutilizar la geografía ya modelada. Se incluyó la bandera `es_principal` para identificar la casa matriz.
+* **Tablas modificadas con `id_sucursal`:** `empleado`, `usuario`, `compra`, `movimiento`, `turno_caja`, `factura`.
+* **Impacto en Inventario:** Se eliminaron `stock_actual` y `stock_minimo` de la tabla `producto` y se creó la tabla `inventario_sucursal` (PK compuesta: `id_sucursal`, `id_producto`), permitiendo que cada sucursal lleve su propio kardex de existencias.
+* **Archivos modificados:** `DB_TornilloFLojo.sql`, `ER_Diagram_mermaid.txt`, `Diccionario-de-datos-Tornillo Flojo.csv`.
+
 ### [Mayo 2026] Consolidación Inicial del Esquema
 * **Contexto:** Refactorización de la base de datos de un taller a un punto de venta y kardex.
 * **Decisión:** Se creó el script consolidado `DB_TornilloFLojo.sql` y las reglas de Stored Procedures en `SP_CRUD_GUIDELINES.md`.

@@ -9,6 +9,14 @@ municipio,id_dep,INT,Relacion con departamento,FK (departamento)
 barrio,id,INT,Identificador del barrio,PK; NOT NULL
 barrio,nombre,VARCHAR(100),Nombre del barrio,NOT NULL
 barrio,id_mun,INT,Relacion con municipio,FK (municipio)
+sucursal,id,INT,Identificador unico de la sucursal,PK; NOT NULL
+sucursal,nombre,VARCHAR(150),Nombre o razon social de la sucursal,NOT NULL
+sucursal,telefono,VARCHAR(20),Telefono de la sucursal,NULL
+sucursal,email,VARCHAR(100),Correo de la sucursal,NULL
+sucursal,id_barrio,INT,Ubicacion geografica de la sucursal,FK (barrio)
+sucursal,direccion_detalle,VARCHAR(300),Referencia de ubicacion,NULL
+sucursal,es_principal,BIT,Indica si es la casa matriz (1=Si),NOT NULL; DEFAULT 0
+sucursal,id_estado,INT,Estado de la sucursal,FK (estado)
 permiso,id,INT,Identificador del permiso,PK; NOT NULL
 permiso,nombre,VARCHAR(100),Nombre unico del permiso,UNIQUE; NOT NULL
 permiso,descripcion,VARCHAR(200),Descripcion del permiso,NULL
@@ -31,12 +39,14 @@ empleado,apellido2,VARCHAR(50),Segundo apellido,NULL
 empleado,identificacion,VARCHAR(20),Identificacion unica,UNIQUE; NOT NULL
 empleado,genero,CHAR(1),Genero,NULL
 empleado,id_cargo,INT,Cargo,FK (cargo)
+empleado,id_sucursal,INT,Sucursal donde labora el empleado,FK (sucursal)
 empleado,id_estado,INT,Estado,FK (estado)
 usuario,id,INT,Identificador del usuario,PK; NOT NULL
 usuario,username,VARCHAR(50),Nombre de usuario,UNIQUE; NOT NULL
 usuario,password_hash,VARCHAR(256),Contrasena encriptada,NOT NULL
 usuario,id_empleado,INT,Empleado,FK (empleado)
 usuario,id_rol,INT,Rol o Perfil base del usuario,FK (rol)
+usuario,id_sucursal,INT,Sucursal operativa principal del usuario,FK (sucursal)
 usuario,id_estado,INT,Estado,FK (estado)
 usuario,fecha_creacion,DATETIME,Fecha de creacion,DEFAULT GETDATE()
 usuario_permiso,id_usuario,INT,Usuario asociado,PK; FK (usuario); NOT NULL
@@ -62,8 +72,7 @@ producto,id,INT,Identificador del producto,PK; NOT NULL
 producto,codigo_parte,VARCHAR(50),Codigo unico,UNIQUE
 producto,nombre,VARCHAR(200),Nombre del producto,NOT NULL
 producto,descripcion,VARCHAR(MAX),Descripcion,NULL
-producto,stock_actual,INT,Stock disponible,DEFAULT 0
-producto,stock_minimo,INT,Stock minimo,DEFAULT 5
+-- NOTA: stock_actual y stock_minimo fueron movidos a inventario_sucursal (control por sucursal)
 producto,precio_venta,"DECIMAL(18,2)",Precio de venta,NOT NULL
 producto,id_categoria,INT,Categoria,FK (producto_categoria)
 producto,id_estado,INT,Estado,FK (estado)
@@ -77,6 +86,7 @@ proveedor,id_estado,INT,Estado del proveedor,FK (estado)
 compra,id,BIGINT,Identificador de la compra,PK; NOT NULL
 compra,numero_factura_proveedor,VARCHAR(50),Numero de factura,NOT NULL
 compra,id_proveedor,INT,Proveedor asociado,FK (proveedor)
+compra,id_sucursal,INT,Sucursal que realiza la compra,FK (sucursal)
 compra,fecha_compra,DATETIME,Fecha de la compra,DEFAULT GETDATE()
 compra,total,"DECIMAL(18,2)",Total de la compra,NOT NULL
 compra,id_estado,INT,Estado de la compra,FK (estado)
@@ -97,6 +107,7 @@ tipo_movimiento,multiplicador,INT,1 para entrada y -1 para salida,NOT NULL
 movimiento,id,BIGINT,Identificador del movimiento,PK; NOT NULL
 movimiento,id_producto,INT,Producto movido,FK (producto)
 movimiento,id_tipo_movimiento,INT,Tipo de movimiento,FK (tipo_movimiento)
+movimiento,id_sucursal,INT,Sucursal donde ocurre el movimiento,FK (sucursal)
 movimiento,cantidad,INT,Cantidad movida,NOT NULL
 movimiento,costo_unitario,"DECIMAL(18,2)",Costo del movimiento,NOT NULL
 movimiento,stock_resultante,INT,Stock despues del movimiento,NOT NULL
@@ -105,6 +116,7 @@ movimiento,id_usuario,INT,Usuario responsable,FK (usuario)
 movimiento,referencia,VARCHAR(100),Referencia externa,NULL
 turno_caja,id,INT,Identificador del turno,PK; NOT NULL
 turno_caja,id_usuario,INT,Cajero responsable,FK (usuario)
+turno_caja,id_sucursal,INT,Sucursal a la que pertenece la caja,FK (sucursal)
 turno_caja,fecha_apertura,DATETIME,Apertura del turno,DEFAULT GETDATE()
 turno_caja,fecha_cierre,DATETIME,Cierre del turno,NULL
 turno_caja,monto_inicial,"DECIMAL(18,2)",Monto de apertura,NOT NULL
@@ -114,6 +126,7 @@ factura,id,BIGINT,Identificador,PK; NOT NULL
 factura,numero_factura,VARCHAR(50),Numero de factura,UNIQUE; NOT NULL
 factura,id_cliente,INT,Cliente,FK (cliente)
 factura,id_turno_caja,INT,Turno de caja,FK (turno_caja)
+factura,id_sucursal,INT,Sucursal emisora de la factura,FK (sucursal)
 factura,subtotal,"DECIMAL(18,2)",Subtotal,NOT NULL
 factura,impuesto,"DECIMAL(18,2)",Impuesto,NOT NULL
 factura,total,"DECIMAL(18,2)",Total,NOT NULL
@@ -125,3 +138,7 @@ factura_detalle,id_producto,INT,Producto vendido,FK (producto)
 factura_detalle,cantidad,INT,Cantidad vendida,NOT NULL
 factura_detalle,precio_unitario,"DECIMAL(18,2)",Precio por unidad,NOT NULL
 factura_detalle,subtotal,AS (cantidad * precio_unitario),Subtotal calculado,COMPUTED
+inventario_sucursal,id_sucursal,INT,Sucursal,PK; FK (sucursal); NOT NULL
+inventario_sucursal,id_producto,INT,Producto,PK; FK (producto); NOT NULL
+inventario_sucursal,stock_actual,INT,Unidades disponibles en la sucursal,NOT NULL; DEFAULT 0
+inventario_sucursal,stock_minimo,INT,Nivel minimo de alerta de reposicion,NOT NULL; DEFAULT 5

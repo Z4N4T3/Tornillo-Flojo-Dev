@@ -5,12 +5,14 @@ estado[Estado]
 departamento[Departamento]
 municipio[Municipio]
 barrio[Barrio]
+sucursal[Sucursal]
 cargo[Cargo]
 empleado[Empleado]
 usuario[Usuario]
 cliente[Cliente]
 producto[Producto]
 categoria[ProductoCategoria]
+inventario_sucursal[InventarioSucursal]
 proveedor[Proveedor]
 compra[Compra]
 compra_detalle[CompraDetalle]
@@ -35,12 +37,15 @@ r8{Incluye}
 r9{Movimiento}
 r10{Opera}
 r11{Compatibilidad}
+r12{PerteneceSuc}
+r13{StockEn}
 
 %% CORE RELATIONSHIPS
 
 departamento --> r1 --> municipio
 municipio --> r2 --> barrio
 barrio --> r3 --> cliente
+barrio --> sucursal
 
 categoria --> r4 --> producto
 
@@ -69,6 +74,18 @@ producto --> r11
 cargo --> empleado
 empleado --> usuario
 
+%% SUCURSAL RELATIONSHIPS
+
+sucursal --> r12 --> empleado
+sucursal --> r12 --> usuario
+sucursal --> r12 --> turno_caja
+sucursal --> r12 --> factura
+sucursal --> r12 --> compra
+sucursal --> r12 --> kardex
+
+sucursal --> r13 --> inventario_sucursal
+producto --> r13
+
 %% STATES
 
 estado --> cargo
@@ -79,3 +96,4 @@ estado --> proveedor
 estado --> compra
 estado --> turno_caja
 estado --> factura
+estado --> sucursal
