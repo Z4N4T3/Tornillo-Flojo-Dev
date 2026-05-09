@@ -11,6 +11,40 @@ Este archivo sirve como "memoria" y bitácora de las decisiones arquitectónicas
 
 ## 📝 Historial de Cambios y Decisiones Clave
 
+### [Mayo 2026] Preparación del Entorno de Desarrollo (Antigravity)
+* **Contexto:** Se requiere configurar el ambiente para iniciar el desarrollo del backend en .NET.
+* **Acciones:**
+  * Se instaló la extensión **C# Dev Kit** (`ms-dotnettools.csdevkit`) y sus dependencias (`C#` y `.NET Runtime`) directamente en Antigravity.
+  * Se confirmó que Antigravity está configurado para utilizar el marketplace oficial de VS Code.
+* **Estado:** Extensión instalada con éxito. Pendiente verificación de compilación una vez se cree la solución.
+
+### [Mayo 2026] Setup de Frontend y UI de Prueba (StitchMCP)
+* **Contexto:** Extracción de interfaz y setup inicial sin dependencias en el servidor .NET.
+* **Acciones:**
+  * Se creó un proyecto base de Node.js + Vite en la carpeta `/Frontend`.
+  * Se extrajo exitosamente la pantalla de "Login" desde el proyecto "ERP El Tornillo Flojo" utilizando la integración StitchMCP.
+  * Se instalaron las dependencias del frontend (npm install) y se configuró la pantalla descargada como el `index.html` del proyecto.
+* **Estado:** Completado.
+
+### [Mayo 2026] Setup de Backend MVC (.NET 10)
+* **Contexto:** Inicializar la arquitectura base según la estructura del proyecto en `source\repos\Test` (usando MVC en lugar de Razor Pages aisladas) usando el CLI de .NET disponible en Archivos de Programa.
+* **Acciones:**
+  * Se creó la solución `TornilloFlojo.sln`.
+  * Se hizo scaffold del proyecto `TornilloFlojo.Web` usando el comando `dotnet new mvc -f net10.0`.
+  * Se migró la pantalla de Login (previamente estática en Vite) hacia el proyecto MVC en `Views/Home/Index.cshtml`, aislando la vista del Layout principal.
+  * Se trasladó la imagen de fondo hacia `wwwroot`.
+* **Estado:** Compilación exitosa. La interfaz de login ahora se renderiza desde el servidor (SSR) mediante ASP.NET Core. No se incluyeron configuraciones de base de datos ni Entity Framework temporalmente.
+
+### [Mayo 2026] Refactorización de Frontend a Razor + Bootstrap
+* **Contexto:** Decisión arquitectónica para aprovechar las ventajas del enlace de datos fuerte (Strongly Typed Views) y la validación de MVC.
+* **Acciones:**
+  * Se eliminó la dependencia de Tailwind CSS en favor de Bootstrap 5 (incluido por defecto en ASP.NET Core).
+  * Se creó el modelo `LoginViewModel` con anotaciones de datos (Data Annotations) para la validación.
+  * Se actualizó `HomeController` para manejar el POST del login y comprobar `ModelState.IsValid`.
+  * Se creó la plantilla `_LoginLayout.cshtml` sin navbar ni footer para el login.
+  * Se reescribió `Index.cshtml` utilizando Bootstrap Grid y Razor Tag Helpers (`asp-for`, `asp-validation-for`, `asp-action`).
+* **Estado:** Completado y compilado sin advertencias. La vista ahora cuenta con validación tanto del lado del cliente como del servidor integrada.
+
 ### [Mayo 2026] Implementación de RBAC (Roles y Permisos)
 * **Contexto:** Se solicitó incluir un sistema de permisos dinámicos y roles predefinidos.
 * **Decisión:** Se adoptó un modelo mixto con tablas `rol`, `permiso`, `rol_permiso` (M:N) y `usuario_permiso` (M:N).
@@ -30,6 +64,18 @@ Este archivo sirve como "memoria" y bitácora de las decisiones arquitectónicas
 * **Decisión:** Se creó la tabla `sucursal` como entidad fundacional (antes de Security & HR) que se enlaza a `barrio` para reutilizar la geografía ya modelada. Se incluyó la bandera `es_principal` para identificar la casa matriz.
 * **Tablas modificadas con `id_sucursal`:** `empleado`, `usuario`, `compra`, `movimiento`, `turno_caja`, `factura`.
 * **Impacto en Inventario:** Se eliminaron `stock_actual` y `stock_minimo` de la tabla `producto` y se creó la tabla `inventario_sucursal` (PK compuesta: `id_sucursal`, `id_producto`), permitiendo que cada sucursal lleve su propio kardex de existencias.
+* **Archivos modificados:** `DB_TornilloFLojo.sql`, `ER_Diagram_mermaid.txt`, `Diccionario-de-datos-Tornillo Flojo.csv`.
+
+### [Mayo 2026] Análisis de Cobertura RF/RNF y Correcciones
+* **Contexto:** Se cruzaron los requisitos funcionales (RF-01 a RF-10) y no funcionales (RNF-01 a RNF-06) contra el esquema SQL para detectar brechas.
+* **Brechas corregidas:**
+  * **RF-01:** Se creó la tabla `producto_marca` para marcas de repuestos (Bosch, Monroe, etc.) y se agregó `id_marca` como FK en `producto`. Se agregó el campo `precio_costo` a `producto`.
+  * **RF-08:** Se creó la tabla `gasto_operativo` para registrar egresos no-inventariables (pago de servicios, caja chica, alquiler).
+* **Brechas descartadas (decisión del usuario):**
+  * RF-05 bimonetario (moneda/tasa de cambio) — el sistema operará con moneda única.
+  * RF-09 bitácora de auditoría — se implementará en una fase futura.
+  * RNF-04 migración DATETIME→DATETIME2 — se mantiene DATETIME.
+  * RNF-06 índices no agrupados — descartados por el momento.
 * **Archivos modificados:** `DB_TornilloFLojo.sql`, `ER_Diagram_mermaid.txt`, `Diccionario-de-datos-Tornillo Flojo.csv`.
 
 ### [Mayo 2026] Consolidación Inicial del Esquema

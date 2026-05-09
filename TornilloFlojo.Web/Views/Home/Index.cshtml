@@ -1,0 +1,98 @@
+@model TornilloFlojo.Web.Models.LoginViewModel
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Login";
+}
+
+<div class="container-fluid min-vh-100 d-flex flex-column p-0">
+    <div class="row g-0 flex-grow-1">
+        <!-- Left Side: Image/Branding -->
+        <div class="col-lg-6 d-none d-lg-flex bg-login-image position-relative">
+            <div class="position-absolute w-100 h-100" style="background: linear-gradient(to top, rgba(15,23,42,0.8), rgba(15,23,42,0.2), transparent);"></div>
+            <div class="position-relative z-index-1 p-5 d-flex flex-column justify-content-end w-100">
+                <div class="mb-4">
+                    <h1 class="display-4 text-white fw-bold shadow-sm">El Tornillo Flojo</h1>
+                    <p class="fs-4 text-light mt-2">Confianza Local. Inventario Global.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center p-4 p-md-5 bg-white">
+            <div class="w-100" style="max-width: 450px;">
+                <!-- Mobile Branding (Hidden on Desktop) -->
+                <div class="d-lg-none mb-5 text-center">
+                    <h1 class="display-5 text-dark fw-bold">El Tornillo Flojo</h1>
+                    <p class="text-muted mt-2">Confianza Local. Inventario Global.</p>
+                </div>
+
+                <!-- Login Header -->
+                <div class="mb-5 text-center text-lg-start">
+                    <h2 class="fs-2 text-dark fw-semibold">Bienvenido de nuevo</h2>
+                    <p class="text-muted mt-2">Ingrese sus credenciales para acceder al sistema.</p>
+                </div>
+
+                <!-- Form -->
+                <form asp-action="Index" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Username Input -->
+                    <div class="mb-4">
+                        <label asp-for="Username" class="form-label fw-semibold text-dark"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted">
+                                <span class="material-symbols-outlined">person</span>
+                            </span>
+                            <input asp-for="Username" class="form-control border-start-0 ps-0" placeholder="johndoe" />
+                        </div>
+                        <span asp-validation-for="Username" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label fw-semibold text-dark"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted">
+                                <span class="material-symbols-outlined">lock</span>
+                            </span>
+                            <input asp-for="Password" class="form-control border-start-0 border-end-0 px-0" placeholder="••••••••" />
+                            <span class="input-group-text bg-white border-start-0" style="cursor: pointer;">
+                                <span class="material-symbols-outlined text-muted">visibility_off</span>
+                            </span>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input text-warning" />
+                            <label asp-for="RememberMe" class="form-check-label text-muted"></label>
+                        </div>
+                        <div>
+                            <a href="#" class="text-decoration-none text-danger fw-semibold" style="color: #a53c19 !important;">¿Olvidó su contraseña?</a>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-lg w-100 text-white fw-semibold" style="background-color: #a53c19; border-color: #a53c19;">
+                            Ingresar
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Footer / Support -->
+                <div class="mt-5 text-center">
+                    <p class="text-muted small">
+                        ¿Necesita ayuda? <a href="#" class="text-warning text-decoration-none fw-semibold">Contacte a Soporte</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

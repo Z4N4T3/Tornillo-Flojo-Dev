@@ -29,14 +29,14 @@ Desarrollar una solución web integral para la gestión de inventario y facturac
 Se ha optado por una arquitectura monolítica moderna basada en tecnologías de Microsoft, ideal para demostrar un alto nivel de competencia en ingeniería de software.
 
 ### 3.1. Frontend (Capa de Presentación)
-* **Tecnología:** **.NET 8 Razor Pages / MVC**.
+* **Tecnología:** **.NET 10 MVC**.
 * **Descripción:** Renderizado del lado del servidor (SSR) que permite una integración nativa con la lógica de C#.
-* **Estilos:** Se utilizará **Tailwind CSS** o **Bootstrap** (vía LibMan) para garantizar que la interfaz web sea responsiva y profesional.
+* **Estilos:** Se utilizará **Bootstrap** (vía LibMan) para garantizar que la interfaz web sea responsiva y profesional.
 
 ### 3.2. Backend (Lógica de Negocio y API)
-* **Framework:** **ASP.NET Core 9 (Web API)**.
+* **Framework:** **ASP.NET Core 10 (MVC)**.
 * **ORM:** **Entity Framework Core (EF Core)** utilizando el enfoque *Code-First*. Esto permite definir la estructura de la base de datos directamente desde clases en C#, facilitando el control de versiones del esquema.
-* **Lenguaje:** **C# 13**.
+* **Lenguaje:** **C# 14** (O el último disponible con .NET 10).
 
 ### 3.3. Base de Datos
 * **Motor:** **Microsoft SQL Server (MSSQL)**.

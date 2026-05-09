@@ -23,7 +23,9 @@ tipo_movimiento[TipoMovimiento]
 turno_caja[TurnoCaja]
 vehiculo_marca[VehiculoMarca]
 vehiculo_modelo[VehiculoModelo]
+producto_marca[ProductoMarca]
 producto_compatibilidad[ProductoCompatibilidad]
+gasto_operativo[GastoOperativo]
 
 %% RELATIONSHIPS (diamonds simulated)
 r1{Tiene}
@@ -39,6 +41,8 @@ r10{Opera}
 r11{Compatibilidad}
 r12{PerteneceSuc}
 r13{StockEn}
+r14{Fabrica}
+r15{Egreso}
 
 %% CORE RELATIONSHIPS
 
@@ -69,6 +73,10 @@ vehiculo_marca --> vehiculo_modelo
 vehiculo_modelo --> r11 --> producto_compatibilidad
 producto --> r11
 
+%% PRODUCT BRAND
+
+producto_marca --> r14 --> producto
+
 %% EMPLOYEE / USER
 
 cargo --> empleado
@@ -85,6 +93,12 @@ sucursal --> r12 --> kardex
 
 sucursal --> r13 --> inventario_sucursal
 producto --> r13
+
+%% EGRESOS OPERATIVOS
+
+turno_caja --> r15 --> gasto_operativo
+sucursal --> r15
+usuario --> r15
 
 %% STATES
 

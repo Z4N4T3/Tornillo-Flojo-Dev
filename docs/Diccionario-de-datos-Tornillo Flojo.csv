@@ -66,14 +66,17 @@ vehiculo_marca,nombre,VARCHAR(100),Nombre de la marca,NOT NULL
 vehiculo_modelo,id,INT,Identificador del modelo,PK; NOT NULL
 vehiculo_modelo,nombre,VARCHAR(100),Nombre del modelo,NOT NULL
 vehiculo_modelo,id_marca,INT,Marca del vehiculo,FK (vehiculo_marca)
+producto_marca,id,INT,Identificador de la marca de repuesto,PK; NOT NULL
+producto_marca,nombre,VARCHAR(100),Nombre de la marca (ej: Bosch; Monroe; Gates),NOT NULL
 producto_categoria,id,INT,Identificador de la categoria,PK; NOT NULL
 producto_categoria,nombre,VARCHAR(100),Nombre de la categoria,NOT NULL
 producto,id,INT,Identificador del producto,PK; NOT NULL
 producto,codigo_parte,VARCHAR(50),Codigo unico,UNIQUE
 producto,nombre,VARCHAR(200),Nombre del producto,NOT NULL
 producto,descripcion,VARCHAR(MAX),Descripcion,NULL
--- NOTA: stock_actual y stock_minimo fueron movidos a inventario_sucursal (control por sucursal)
+producto,precio_costo,"DECIMAL(18,2)",Costo de adquisicion referencial,NULL
 producto,precio_venta,"DECIMAL(18,2)",Precio de venta,NOT NULL
+producto,id_marca,INT,Marca del repuesto,FK (producto_marca)
 producto,id_categoria,INT,Categoria,FK (producto_categoria)
 producto,id_estado,INT,Estado,FK (estado)
 proveedor,id,INT,Identificador del proveedor,PK; NOT NULL
@@ -142,3 +145,11 @@ inventario_sucursal,id_sucursal,INT,Sucursal,PK; FK (sucursal); NOT NULL
 inventario_sucursal,id_producto,INT,Producto,PK; FK (producto); NOT NULL
 inventario_sucursal,stock_actual,INT,Unidades disponibles en la sucursal,NOT NULL; DEFAULT 0
 inventario_sucursal,stock_minimo,INT,Nivel minimo de alerta de reposicion,NOT NULL; DEFAULT 5
+gasto_operativo,id,BIGINT,Identificador del egreso,PK; NOT NULL
+gasto_operativo,id_turno_caja,INT,Turno de caja asociado,FK (turno_caja)
+gasto_operativo,id_sucursal,INT,Sucursal donde se registra el gasto,FK (sucursal)
+gasto_operativo,concepto,VARCHAR(300),Descripcion del egreso,NOT NULL
+gasto_operativo,monto,"DECIMAL(18,2)",Monto del egreso,NOT NULL
+gasto_operativo,fecha,DATETIME,Fecha del egreso,DEFAULT GETDATE()
+gasto_operativo,id_usuario,INT,Usuario que registra el egreso,FK (usuario)
+gasto_operativo,id_estado,INT,Estado del registro,FK (estado)

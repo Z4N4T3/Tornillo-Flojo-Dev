@@ -144,6 +144,11 @@ CREATE TABLE vehiculo_modelo (
 );
 
 -- 4. INVENTORY (Auto Parts)
+CREATE TABLE producto_marca (
+    id     INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL  -- Ej: 'Bosch', 'Monroe', 'Gates', 'Denso'
+);
+
 CREATE TABLE producto_categoria (
     id INT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL
@@ -156,7 +161,9 @@ CREATE TABLE producto (
     codigo_parte VARCHAR(50) UNIQUE,
     nombre VARCHAR(200) NOT NULL,
     descripcion VARCHAR(MAX),
+    precio_costo DECIMAL(18, 2) NULL,      -- Costo de adquisición referencial (RF-01)
     precio_venta DECIMAL(18, 2) NOT NULL,
+    id_marca     INT FOREIGN KEY REFERENCES producto_marca(id),  -- Marca del repuesto (RF-01)
     id_categoria INT FOREIGN KEY REFERENCES producto_categoria(id),
     id_estado    INT FOREIGN KEY REFERENCES estado(id)
 );
@@ -262,6 +269,20 @@ CREATE TABLE factura_detalle (
     cantidad INT NOT NULL,
     precio_unitario DECIMAL(18, 2) NOT NULL,
     subtotal AS (cantidad * precio_unitario)
+);
+
+-- 8b. EGRESOS OPERATIVOS (Flujo de Efectivo - RF-08)
+-- Registra salidas de dinero no relacionadas con compras de inventario:
+-- pago de servicios, alquiler, gastos menores de caja chica, etc.
+CREATE TABLE gasto_operativo (
+    id          BIGINT PRIMARY KEY,
+    id_turno_caja INT FOREIGN KEY REFERENCES turno_caja(id),
+    id_sucursal INT FOREIGN KEY REFERENCES sucursal(id),
+    concepto    VARCHAR(300) NOT NULL,  -- Ej: 'Pago de energía eléctrica', 'Compra de papelería'
+    monto       DECIMAL(18,2) NOT NULL,
+    fecha       DATETIME DEFAULT GETDATE(),
+    id_usuario  INT FOREIGN KEY REFERENCES usuario(id),
+    id_estado   INT FOREIGN KEY REFERENCES estado(id)
 );
 
 -- 9. STORED PROCEDURES
