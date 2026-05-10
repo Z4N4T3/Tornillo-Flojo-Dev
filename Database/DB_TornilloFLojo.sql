@@ -1,21 +1,22 @@
 /*
 ==============================================================================
-CARSHOP MANAGEMENT SYSTEM - CONSOLIDATED SCHEMA
-Derived from NicaPOS Architecture Good Practices
+El tornillo flojo -  esquema consolidado
+
+Extraido de NicaPOS
 ==============================================================================
 */
 
 USE [master]
 GO
 
-IF EXISTS (SELECT name FROM sys.databases WHERE name = N'DB_Carshop')
-    DROP DATABASE [DB_Carshop];
+IF EXISTS (SELECT name FROM sys.databases WHERE name = N'DB_TornilloFlojo')
+    DROP DATABASE [DB_TornilloFlojo];
 GO
 
-CREATE DATABASE [DB_Carshop];
+CREATE DATABASE [DB_TornilloFlojo];
 GO
 
-USE [DB_Carshop];
+USE [DB_TornilloFlojo];
 GO
 
 -- 1. FOUNDATIONAL TABLES (Status & Geography)
