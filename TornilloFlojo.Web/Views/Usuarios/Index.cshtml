@@ -1,0 +1,166 @@
+@model IEnumerable<TornilloFlojo.Web.Models.UsuarioListViewModel>
+@{
+    ViewData["Title"] = "Gestión de Usuarios y Empleados";
+}
+
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="mb-1">Gestión de Usuarios y Empleados</h2>
+        <p class="text-muted mb-0">Administra el acceso de los empleados, roles y perfiles.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-warning d-flex align-items-center gap-2 text-dark fw-bold">
+        <i class="bi bi-person-plus"></i> Crear Nuevo Perfil
+    </a>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Stats Card -->
+    <div class="col-12 col-md-3">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="bi bi-people text-danger fs-3 mb-3 d-block"></i>
+                    <h5 class="card-title mb-1">Total de Usuarios</h5>
+                    <p class="text-muted small">Personal Activo</p>
+                </div>
+                <div class="mt-3 display-5 fw-bold text-warning">
+                    42
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roles Distribution -->
+    <div class="col-12 col-md-9">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Distribución de Roles</h5>
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small text-uppercase mb-2"><i class="bi bi-shield"></i> Admin</div>
+                            <div class="fs-4 fw-bold">4</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small text-uppercase mb-2"><i class="bi bi-shop"></i> Vendedor</div>
+                            <div class="fs-4 fw-bold">24</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small text-uppercase mb-2"><i class="bi bi-cash-coin"></i> Cajero</div>
+                            <div class="fs-4 fw-bold">10</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small text-uppercase mb-2"><i class="bi bi-box-seam"></i> Bodega</div>
+                            <div class="fs-4 fw-bold">4</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Users Table Container -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                <i class="bi bi-funnel"></i> Filtrar
+            </button>
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                <i class="bi bi-sort-down"></i> Ordenar
+            </button>
+        </div>
+        <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text bg-white text-muted border-end-0">
+                <i class="bi bi-search"></i>
+            </span>
+            <input type="text" class="form-control border-start-0" placeholder="Buscar usuario...">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-muted small text-uppercase">
+                <tr>
+                    <th class="ps-4">Empleado</th>
+                    <th>Contacto</th>
+                    <th>Cargo</th>
+                    <th>Rol en Sistema</th>
+                    <th>Estado</th>
+                    <th class="text-end pe-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-warning bg-opacity-25 text-warning d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">@usuario.Iniciales</div>
+                                <div>
+                                    <div class="fw-bold">@usuario.EmpleadoNombre</div>
+                                    <div class="text-muted small">@usuario.Identificacion</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-muted">@usuario.Contacto</td>
+                        <td>@usuario.CargoNombre</td>
+                        <td>
+                            @if (usuario.RolNombre.ToLower().Contains("admin"))
+                            {
+                                <span class="badge bg-dark rounded-pill">@usuario.RolNombre</span>
+                            }
+                            else if (usuario.RolNombre.ToLower().Contains("seller") || usuario.RolNombre.ToLower().Contains("vendedor"))
+                            {
+                                <span class="badge bg-warning text-dark rounded-pill">@usuario.RolNombre</span>
+                            }
+                            else if (usuario.RolNombre.ToLower().Contains("cashier") || usuario.RolNombre.ToLower().Contains("cajero"))
+                            {
+                                <span class="badge bg-danger rounded-pill">@usuario.RolNombre</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary rounded-pill">@usuario.RolNombre</span>
+                            }
+                        </td>
+                        <td>
+                            @if (usuario.EstadoNombre == "Activo")
+                            {
+                                <span class="text-success small fw-bold d-flex align-items-center gap-1">
+                                    <i class="bi bi-circle-fill" style="font-size: 8px;"></i> @usuario.EstadoNombre
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-secondary small fw-bold d-flex align-items-center gap-1">
+                                    <i class="bi bi-circle-fill" style="font-size: 8px;"></i> @usuario.EstadoNombre
+                                </span>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-link text-muted"><i class="bi bi-pencil"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+        <span class="text-muted small">Mostrando 1 a 3 de 42 registros</span>
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                <li class="page-item active"><a class="page-link bg-warning text-dark border-warning" href="#">1</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">Siguiente</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+@model TornilloFlojo.Web.Models.UsuarioCreateViewModel
+@{
+    ViewData["Title"] = "Crear Nuevo Usuario";
+}
+
+<div class="mb-4">
+    <h2 class="mb-1">Crear Nuevo Usuario</h2>
+    <p class="text-muted">Agregue un nuevo empleado al sistema y configure sus permisos de acceso.</p>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
+            <!-- Personal Information -->
+            <div class="mb-5">
+                <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-person-fill text-warning"></i> Información Personal
+                </h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="NombreCompleto" class="form-label text-muted small text-uppercase fw-bold">Nombre Completo</label>
+                        <input asp-for="NombreCompleto" class="form-control" placeholder="Ej. Juan Pérez">
+                        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Identificacion" class="form-label text-muted small text-uppercase fw-bold">Número de Identificación (Cédula)</label>
+                        <input asp-for="Identificacion" class="form-control" placeholder="000-000000-0000A">
+                        <span asp-validation-for="Identificacion" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label text-muted small text-uppercase fw-bold">Correo Electrónico</label>
+                        <input asp-for="Email" class="form-control" placeholder="juan.perez@tornilloflojo.com">
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Telefono" class="form-label text-muted small text-uppercase fw-bold">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" placeholder="+505 8888 8888">
+                        <span asp-validation-for="Telefono" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employment Details & Profile Picture Grid -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-8">
+                    <div class="mb-5">
+                        <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-briefcase-fill text-warning"></i> Detalles de Empleo
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="IdCargo" class="form-label text-muted small text-uppercase fw-bold">Cargo</label>
+                                <select asp-for="IdCargo" class="form-select">
+                                    <option value="">Seleccione un cargo</option>
+                                    <option value="1">Gerente General</option>
+                                    <option value="2">Gerente de Tienda</option>
+                                    <option value="3">Vendedor Mostrador</option>
+                                    <option value="4">Cajero</option>
+                                    <option value="5">Bodeguero</option>
+                                </select>
+                                <span asp-validation-for="IdCargo" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="IdRol" class="form-label text-muted small text-uppercase fw-bold">Rol del Sistema</label>
+                                <select asp-for="IdRol" class="form-select">
+                                    <option value="">Seleccione un rol</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="2">Vendedor</option>
+                                    <option value="3">Cajero</option>
+                                    <option value="4">Bodega</option>
+                                </select>
+                                <span asp-validation-for="IdRol" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-lock-fill text-warning"></i> Seguridad de Cuenta
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Username" class="form-label text-muted small text-uppercase fw-bold">Nombre de Usuario</label>
+                                <input asp-for="Username" class="form-control" placeholder="jperez">
+                                <span asp-validation-for="Username" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="PasswordTemporal" class="form-label text-muted small text-uppercase fw-bold">Contraseña Temporal</label>
+                                <input asp-for="PasswordTemporal" class="form-control" placeholder="••••••••">
+                                <div class="form-text small">El usuario deberá cambiarla al iniciar sesión.</div>
+                                <span asp-validation-for="PasswordTemporal" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="col-md-4 border-start d-none d-md-block">
+                    <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-person-bounding-box text-warning"></i> Fotografía
+                    </h5>
+                    <div class="border border-2 border-dashed border-secondary rounded p-4 text-center bg-light d-flex flex-column align-items-center justify-content-center cursor-pointer" style="height: 200px;">
+                        <i class="bi bi-camera text-muted fs-1 mb-2"></i>
+                        <p class="text-muted mb-0 small">Haz clic para subir foto</p>
+                        <p class="text-secondary mt-1 small" style="font-size: 0.75rem;">JPG, PNG (Max. 2MB)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                <a asp-action="Index" class="btn btn-outline-danger fw-bold px-4 text-uppercase">Cancelar</a>
+                <button type="submit" class="btn btn-danger fw-bold px-4 text-uppercase d-flex align-items-center gap-2">
+                    <i class="bi bi-save"></i> Guardar Usuario
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

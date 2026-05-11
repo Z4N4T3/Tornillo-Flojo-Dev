@@ -1,29 +1,73 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.Data.SqlClient;
+using Dapper;
 using TornilloFlojo.Web.Models;
 
 namespace TornilloFlojo.Web.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly string _connectionString;
+
+    public HomeController(IConfiguration configuration)
+    {
+        _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+    }
+
     [HttpGet]
     public IActionResult Index()
     {
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Index", "Usuarios");
+        }
         return View(new LoginViewModel());
     }
 
     [HttpPost]
-    public IActionResult Index(LoginViewModel model)
+    public async Task<IActionResult> Index(LoginViewModel model)
     {
         if (ModelState.IsValid)
         {
-            // Lógica de autenticación iría aquí
-            // Por ahora solo redirigimos para simular éxito
-            return RedirectToAction("Index", "Home"); 
+            using var connection = new SqlConnection(_connectionString);
+            
+            var user = await connection.QueryFirstOrDefaultAsync<dynamic>(
+                "usp_Usuario_Login",
+                new { username = model.Username, password_hash = model.Password },
+                commandType: System.Data.CommandType.StoredProcedure
+            );
+
+            if (user != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.username),
+                    new Claim(ClaimTypes.Role, user.RolNombre),
+                    new Claim("Id", user.id.ToString())
+                };
+
+                var identity = new ClaimsIdentity(claims, "Cookies");
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync("Cookies", principal);
+
+                return RedirectToAction("Index", "Usuarios");
+            }
+            
+            ModelState.AddModelError(string.Empty, "Usuario o contraseña incorrectos.");
         }
 
-        // Si hay errores, volver a mostrar la vista con el modelo
         return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync("Cookies");
+        return RedirectToAction("Index", "Home");
     }
 
     public IActionResult Privacy()

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Management - ERP System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Work+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdbd1",
+                        "secondary": "#a53c19",
+                        "on-secondary-fixed": "#3a0a00",
+                        "tertiary-container": "#ffa488",
+                        "tertiary": "#9b4427",
+                        "primary-container": "#eab308",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "surface-container": "#e6eeff",
+                        "surface-dim": "#ccdbf3",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d5e3fc",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#dce9ff",
+                        "outline-variant": "#d3c5ac",
+                        "inverse-primary": "#f7be1d",
+                        "secondary-fixed-dim": "#ffb59f",
+                        "secondary-container": "#fb7b54",
+                        "inverse-surface": "#233144",
+                        "on-secondary-container": "#6b1a00",
+                        "on-tertiary-container": "#813116",
+                        "tertiary-fixed-dim": "#ffb59e",
+                        "on-tertiary-fixed": "#3a0b00",
+                        "on-primary-fixed": "#251a00",
+                        "on-secondary-fixed-variant": "#842503",
+                        "primary": "#785a00",
+                        "outline": "#817660",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-background": "#0d1c2e",
+                        "primary-fixed-dim": "#f7be1d",
+                        "on-surface": "#0d1c2e",
+                        "on-primary-container": "#604700",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d5e3fc",
+                        "error": "#ba1a1a",
+                        "background": "#f8f9ff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#785a00",
+                        "primary-fixed": "#ffdf9a",
+                        "on-primary-fixed-variant": "#5a4300",
+                        "on-tertiary-fixed-variant": "#7c2d12",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#4f4633",
+                        "surface-bright": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin": "32px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "gutter": "20px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Work Sans"],
+                        "headline-xl": ["Work Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Work Sans"],
+                        "data-mono": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "body-sm": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen text-on-background font-body-md text-body-md flex antialiased">
+<!-- SideNavBar -->
+<nav class="fixed h-full w-[260px] left-0 top-0 z-50 bg-slate-900 border-r border-slate-800 shadow-none flex flex-col py-6">
+<div class="px-6 mb-8 flex flex-col gap-2">
+<h1 class="text-yellow-500 font-black tracking-widest uppercase font-headline-md text-headline-md">Tornillo Flojo</h1>
+<p class="text-slate-400 font-body-sm text-body-sm">Granada, Nicaragua</p>
+</div>
+<div class="flex-1 overflow-y-auto">
+<ul class="flex flex-col gap-1 px-4 font-sans tracking-tight text-sm">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                        New Sale/POS
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                        Inventory
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">payments</span>
+                        Cashier
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT bg-slate-800 text-yellow-500 border-l-4 border-yellow-500 font-semibold transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+                        Settings
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-[260px] flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 sticky z-40 bg-white/90 backdrop-blur-md border-b border-stone-200 flat no shadows flex justify-between items-center h-16 px-8">
+<div class="flex items-center gap-4">
+<span class="text-slate-900 font-bold text-lg font-headline-sm text-headline-sm">ERP System</span>
+</div>
+<div class="flex-1 max-w-md mx-8">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+<input class="w-full bg-surface border-stone-300 border rounded-DEFAULT pl-10 pr-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-stone-500 hover:bg-stone-50 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-stone-500 hover:bg-stone-50 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="p-2 text-stone-500 hover:bg-stone-50 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-6 w-px bg-stone-200 mx-2"></div>
+<button class="px-4 py-2 text-secondary border border-secondary rounded-DEFAULT font-label-md text-label-md hover:bg-secondary-fixed transition-colors">
+                    Support
+                </button>
+<button class="px-4 py-2 bg-primary-container text-on-primary-container rounded-DEFAULT font-label-md text-label-md hover:bg-inverse-primary transition-colors">
+                    New Sale
+                </button>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-stone-200 cursor-pointer" data-alt="A close up, well-lit professional headshot of a mature businessman with short, styled grey hair and a warm, confident smile. He is wearing a crisp light blue button-down shirt. The background is a soft, out-of-focus bright modern office setting, providing a clean and approachable corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-7EXXMSQaYxJxg5lCAGfsq-RQxrWAh7w1yyUOXE_lGmqMbCY6T8dMzDqsOT3bmZtFhYKXadvBkE9wvSLYjOPaChSmNaFzgOhlI50_3p9dn6SAGzAcWPhlCzIm49sQha18P7GFVNFvDeEw0JCvKsxJE34PUdx8WzrJVZvMZeK2FAtqyiWmgKeHF5hJXTa0O9-qG0GrDb02KCBHySlh7jL3aaLBVrHKRivvHqJOmOZy9ENpPhjxRmj0oyyVOuas3l9uLTDJZd-dcdw"/>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-margin bg-surface">
+<div class="max-w-[1400px] mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-background mb-2">User Management</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Manage employee access, roles, and profiles.</p>
+</div>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary-container text-on-primary-container rounded-DEFAULT font-label-md text-label-md hover:bg-inverse-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Create New Profile
+                    </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Stats Card -->
+<div class="col-span-12 md:col-span-3 bg-surface-container-lowest border border-stone-200 rounded-lg p-6 flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-secondary text-3xl mb-4">group</span>
+<h3 class="font-headline-sm text-headline-sm text-on-background mb-1">Total Users</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Active personnel</p>
+</div>
+<div class="mt-6 text-4xl font-headline-xl text-primary font-bold">
+                            42
+                        </div>
+</div>
+<!-- Roles Distribution -->
+<div class="col-span-12 md:col-span-9 bg-surface-container-lowest border border-stone-200 rounded-lg p-6">
+<h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Role Distribution</h3>
+<div class="flex gap-4">
+<div class="flex-1 bg-surface p-4 rounded border border-stone-100">
+<div class="text-xs font-label-md text-on-surface-variant uppercase mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">shield</span> Admin</div>
+<div class="text-2xl font-headline-md text-on-background">4</div>
+</div>
+<div class="flex-1 bg-surface p-4 rounded border border-stone-100">
+<div class="text-xs font-label-md text-on-surface-variant uppercase mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">storefront</span> Seller</div>
+<div class="text-2xl font-headline-md text-on-background">24</div>
+</div>
+<div class="flex-1 bg-surface p-4 rounded border border-stone-100">
+<div class="text-xs font-label-md text-on-surface-variant uppercase mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">point_of_sale</span> Cashier</div>
+<div class="text-2xl font-headline-md text-on-background">10</div>
+</div>
+<div class="flex-1 bg-surface p-4 rounded border border-stone-100">
+<div class="text-xs font-label-md text-on-surface-variant uppercase mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">inventory_2</span> Warehouse</div>
+<div class="text-2xl font-headline-md text-on-background">4</div>
+</div>
+</div>
+</div>
+<!-- Users Table Container -->
+<div class="col-span-12 bg-surface-container-lowest border border-stone-200 rounded-lg overflow-hidden">
+<!-- Table Filters -->
+<div class="p-4 border-b border-stone-200 bg-surface-bright flex justify-between items-center gap-4">
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-surface border border-stone-300 rounded font-label-md text-label-md text-on-surface hover:bg-stone-50 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                                </button>
+<button class="px-3 py-1.5 bg-surface border border-stone-300 rounded font-label-md text-label-md text-on-surface hover:bg-stone-50 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">sort</span> Sort
+                                </button>
+</div>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-stone-400 text-[18px]">search</span>
+<input class="w-full bg-white border-stone-300 border rounded py-1.5 pl-8 pr-3 text-sm font-body-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Find user..." type="text"/>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-stone-50 border-b border-stone-200">
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Employee</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Contact</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Position (Cargo)</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">System Role</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Status</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone-100 font-body-md text-body-md">
+<tr class="hover:bg-[#FEF9C3] transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold">
+                                                    RC
+                                                </div>
+<div>
+<div class="font-medium text-on-background">Roberto Carlos</div>
+<div class="text-on-surface-variant font-body-sm text-xs">EMP-001</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">
+                                            roberto@tornilloflojo.com
+                                        </td>
+<td class="px-6 py-4 text-on-background">
+                                            Gerente General
+                                        </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-stone-800 text-white lowercase">
+                                                admin
+                                            </span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-green-700">
+<span class="w-2 h-2 rounded-full bg-green-500"></span> Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 text-stone-400 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="bg-stone-50/50 hover:bg-[#FEF9C3] transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center text-tertiary font-bold">
+                                                    MG
+                                                </div>
+<div>
+<div class="font-medium text-on-background">Maria Garcia</div>
+<div class="text-on-surface-variant font-body-sm text-xs">EMP-042</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">
+                                            mgarcia@tornilloflojo.com
+                                        </td>
+<td class="px-6 py-4 text-on-background">
+                                            Vendedora Mostrador
+                                        </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-container text-on-primary-container lowercase">
+                                                seller
+                                            </span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-green-700">
+<span class="w-2 h-2 rounded-full bg-green-500"></span> Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 text-stone-400 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-[#FEF9C3] transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-stone-600 font-bold">
+                                                    JL
+                                                </div>
+<div>
+<div class="font-medium text-on-background">Juan Lopez</div>
+<div class="text-on-surface-variant font-body-sm text-xs">EMP-088</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">
+                                            jlopez@tornilloflojo.com
+                                        </td>
+<td class="px-6 py-4 text-on-background">
+                                            Cajero Principal
+                                        </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-secondary-fixed text-on-secondary-fixed lowercase">
+                                                cashier
+                                            </span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-stone-500">
+<span class="w-2 h-2 rounded-full bg-stone-300"></span> Inactive
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 text-stone-400 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 border-t border-stone-200 flex justify-between items-center bg-surface-bright">
+<span class="font-body-sm text-sm text-on-surface-variant">Showing 1 to 3 of 42 entries</span>
+<div class="flex gap-1">
+<button class="px-3 py-1 border border-stone-200 rounded text-stone-400 bg-stone-50" disabled="">Prev</button>
+<button class="px-3 py-1 border border-primary-container rounded bg-primary-container/10 text-primary font-medium">1</button>
+<button class="px-3 py-1 border border-stone-200 rounded hover:bg-stone-50">2</button>
+<button class="px-3 py-1 border border-stone-200 rounded hover:bg-stone-50">3</button>
+<button class="px-3 py-1 border border-stone-200 rounded hover:bg-stone-50">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Side Panel (Create New Profile) - Hidden by default, shown for UI demonstration -->
+<div class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex justify-end" style="display: none;">
+<div class="w-[480px] bg-surface-container-lowest h-full shadow-[-8px_0_24px_rgba(154,52,18,0.08)] flex flex-col border-l border-stone-200">
+<div class="p-6 border-b border-stone-200 flex justify-between items-center bg-white">
+<h2 class="font-headline-sm text-headline-sm text-on-background">Create New Profile</h2>
+<button class="p-2 text-stone-400 hover:text-on-background rounded-full hover:bg-stone-100 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-8 bg-surface">
+<form class="space-y-6">
+<div class="space-y-4">
+<h3 class="font-label-md text-label-md uppercase text-on-surface-variant border-b border-stone-200 pb-2">Personal Information</h3>
+<div>
+<label class="block font-label-md text-label-md text-on-background mb-1">Full Name</label>
+<input class="w-full bg-white border-stone-300 border rounded-DEFAULT px-3 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-background mb-1">Email Address</label>
+<input class="w-full bg-white border-stone-300 border rounded-DEFAULT px-3 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md" type="email"/>
+</div>
+</div>
+<div class="space-y-4 pt-4">
+<h3 class="font-label-md text-label-md uppercase text-on-surface-variant border-b border-stone-200 pb-2">Employment Details</h3>
+<div>
+<label class="block font-label-md text-label-md text-on-background mb-1">Position (Cargo)</label>
+<input class="w-full bg-white border-stone-300 border rounded-DEFAULT px-3 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md" placeholder="e.g. Asistente de Bodega" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-background mb-2">System Role Assignment</label>
+<div class="grid grid-cols-2 gap-3">
+<label class="flex items-center gap-3 p-3 border border-stone-200 rounded cursor-pointer hover:bg-stone-50 bg-white">
+<input class="text-primary-container focus:ring-primary-container" name="role" type="radio"/>
+<span class="font-body-sm text-sm text-on-background">Administrator</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-stone-200 rounded cursor-pointer hover:bg-stone-50 bg-white">
+<input class="text-primary-container focus:ring-primary-container" name="role" type="radio"/>
+<span class="font-body-sm text-sm text-on-background">Seller</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-stone-200 rounded cursor-pointer hover:bg-stone-50 bg-white">
+<input class="text-primary-container focus:ring-primary-container" name="role" type="radio"/>
+<span class="font-body-sm text-sm text-on-background">Cashier</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-stone-200 rounded cursor-pointer hover:bg-stone-50 bg-white">
+<input class="text-primary-container focus:ring-primary-container" name="role" type="radio"/>
+<span class="font-body-sm text-sm text-on-background">Warehouse</span>
+</label>
+</div>
+</div>
+</div>
+</form>
+</div>
+<div class="p-6 border-t border-stone-200 bg-white flex justify-end gap-3">
+<button class="px-6 py-2 border border-secondary text-secondary rounded-DEFAULT font-label-md text-label-md hover:bg-secondary-fixed transition-colors">
+                    Cancel
+                </button>
+<button class="px-6 py-2 bg-primary-container text-on-primary-container rounded-DEFAULT font-label-md text-label-md hover:bg-inverse-primary transition-colors">
+                    Save Profile
+                </button>
+</div>
+</div>
+</div>
+</body></html>

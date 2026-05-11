@@ -1,0 +1,133 @@
+@{
+    ViewData["Title"] = "Matriz de Permisos";
+}
+
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="mb-1">Matriz de Permisos</h2>
+        <p class="text-muted mb-0" style="max-width: 800px;">
+            Gestiona el control de acceso en el sistema ERP. Configura qué roles pueden realizar acciones específicas en los módulos de inventario, ventas y reportes.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-arrow-counterclockwise"></i> Descartar Cambios
+        </button>
+        <button class="btn btn-warning fw-bold d-flex align-items-center gap-2">
+            <i class="bi bi-save"></i> Guardar Matriz
+        </button>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-3 align-items-center">
+            <div class="d-flex align-items-center gap-2 small">
+                <span class="d-inline-block bg-warning rounded-1" style="width: 12px; height: 12px;"></span>
+                <span class="text-muted">Permitido</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 small">
+                <span class="d-inline-block bg-light border rounded-1" style="width: 12px; height: 12px;"></span>
+                <span class="text-muted">Denegado</span>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" style="min-width: 150px;">
+                <option>Todos los Módulos</option>
+                <option>Inventario</option>
+                <option>Ventas & POS</option>
+                <option>Reportes</option>
+                <option>Administración</option>
+            </select>
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-funnel"></i></button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-center align-top">
+                <tr>
+                    <th class="text-start text-muted text-uppercase small ps-4 align-middle" style="min-width: 250px;">Permiso / Acción</th>
+                    <th style="min-width: 120px;">
+                        <div class="fw-bold mb-1">Administrador</div>
+                        <div class="text-muted fw-normal small">Acceso Total</div>
+                    </th>
+                    <th style="min-width: 120px;">
+                        <div class="fw-bold mb-1">Gerente</div>
+                        <div class="text-muted fw-normal small">Operaciones</div>
+                    </th>
+                    <th style="min-width: 120px;">
+                        <div class="fw-bold mb-1">Cajero</div>
+                        <div class="text-muted fw-normal small">Solo POS</div>
+                    </th>
+                    <th style="min-width: 120px;" class="pe-4">
+                        <div class="fw-bold mb-1">Bodega</div>
+                        <div class="text-muted fw-normal small">Solo Inventario</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Modulo 1 -->
+                <tr class="table-secondary">
+                    <td colspan="5" class="text-primary text-uppercase fw-bold small ps-4">
+                        <i class="bi bi-calculator me-1"></i> Ventas & Operaciones POS
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">Crear Nueva Venta</div>
+                        <div class="text-muted small">Procesar transacciones vía POS.</div>
+                    </td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center pe-4"><input class="form-check-input p-2" type="checkbox" disabled></td>
+                </tr>
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">Aplicar Descuentos</div>
+                        <div class="text-muted small">Autorizar reducciones de precio manuales.</div>
+                    </td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input p-2" type="checkbox"></td>
+                    <td class="text-center pe-4"><input class="form-check-input p-2" type="checkbox" disabled></td>
+                </tr>
+
+                <!-- Modulo 2 -->
+                <tr class="table-secondary">
+                    <td colspan="5" class="text-primary text-uppercase fw-bold small ps-4 border-top">
+                        <i class="bi bi-box-seam me-1"></i> Gestión de Inventario
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">Editar Inventario</div>
+                        <div class="text-muted small">Modificar detalles de productos y precios.</div>
+                    </td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input p-2" type="checkbox" disabled></td>
+                    <td class="text-center pe-4"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                </tr>
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">Realizar Conteos de Stock</div>
+                        <div class="text-muted small">Registrar conciliación de inventario físico.</div>
+                    </td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                    <td class="text-center"><input class="form-check-input p-2" type="checkbox" disabled></td>
+                    <td class="text-center pe-4"><input class="form-check-input bg-warning border-warning p-2" type="checkbox" checked></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .form-check-input.p-2 {
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+    }
+</style>

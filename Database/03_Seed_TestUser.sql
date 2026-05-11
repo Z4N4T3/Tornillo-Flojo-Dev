@@ -7,7 +7,7 @@ IF NOT EXISTS (SELECT 1 FROM sucursal WHERE id = 1)
 BEGIN
     -- id_barrio = 46 corresponde a Managua según el Seed Geográfico
     INSERT INTO sucursal (id, nombre, telefono, email, id_barrio, direccion_detalle, es_principal, id_estado)
-    VALUES (1, 'Casa Matriz Managua', '2222-3333', 'matriz@tornilloflojo.com', 46, 'Rotonda Bello Horizonte 1c al Sur', 1, 1);
+    VALUES (1, 'Casa Matriz Managua', '2222-3333', 'matriz@tornilloflojo.com', 1, 'Rotonda Bello Horizonte 1c al Sur', 1, 1);
 END
 GO
 

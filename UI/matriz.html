@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Role-Permission Matrix - Tornillo Flojo ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Work+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdbd1",
+                        "secondary": "#a53c19",
+                        "on-secondary-fixed": "#3a0a00",
+                        "tertiary-container": "#ffa488",
+                        "tertiary": "#9b4427",
+                        "primary-container": "#eab308",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "surface-container": "#e6eeff",
+                        "surface-dim": "#ccdbf3",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d5e3fc",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#dce9ff",
+                        "outline-variant": "#d3c5ac",
+                        "inverse-primary": "#f7be1d",
+                        "secondary-fixed-dim": "#ffb59f",
+                        "secondary-container": "#fb7b54",
+                        "inverse-surface": "#233144",
+                        "on-secondary-container": "#6b1a00",
+                        "on-tertiary-container": "#813116",
+                        "tertiary-fixed-dim": "#ffb59e",
+                        "on-tertiary-fixed": "#3a0b00",
+                        "on-primary-fixed": "#251a00",
+                        "on-secondary-fixed-variant": "#842503",
+                        "primary": "#785a00",
+                        "outline": "#817660",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-background": "#0d1c2e",
+                        "primary-fixed-dim": "#f7be1d",
+                        "on-surface": "#0d1c2e",
+                        "on-primary-container": "#604700",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d5e3fc",
+                        "error": "#ba1a1a",
+                        "background": "#f8f9ff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#785a00",
+                        "primary-fixed": "#ffdf9a",
+                        "on-primary-fixed-variant": "#5a4300",
+                        "on-tertiary-fixed-variant": "#7c2d12",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#4f4633",
+                        "surface-bright": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin": "32px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "gutter": "20px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Work Sans"],
+                        "headline-xl": ["Work Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Work Sans"],
+                        "data-mono": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "body-sm": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom Checkbox Styling for the matrix */
+        .matrix-checkbox:checked + div {
+            background-color: #eab308; /* primary-container */
+            border-color: #eab308;
+        }
+        .matrix-checkbox:checked + div svg {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="fixed h-full w-[260px] left-0 top-0 z-50 bg-slate-900 border-r border-slate-800 shadow-none flex flex-col py-6">
+<div class="px-6 mb-8 flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-slate-800 mb-4 overflow-hidden border-2 border-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-yellow-500 text-3xl">storefront</span>
+</div>
+<h1 class="text-yellow-500 font-black tracking-widest uppercase font-sans text-sm text-center">Tornillo Flojo</h1>
+<p class="text-slate-400 text-xs mt-1 text-center font-label-md">Granada, Nicaragua</p>
+</div>
+<ul class="flex flex-col flex-1 mt-4">
+<li class="mb-1">
+<a class="flex items-center px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out font-sans tracking-tight text-sm scale-100 active:scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined mr-4 group-hover:text-white transition-colors duration-200">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li class="mb-1">
+<a class="flex items-center px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out font-sans tracking-tight text-sm scale-100 active:scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined mr-4 group-hover:text-white transition-colors duration-200">point_of_sale</span>
+                    New Sale/POS
+                </a>
+</li>
+<li class="mb-1">
+<a class="flex items-center px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out font-sans tracking-tight text-sm scale-100 active:scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined mr-4 group-hover:text-white transition-colors duration-200">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li class="mb-1">
+<a class="flex items-center px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out font-sans tracking-tight text-sm scale-100 active:scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined mr-4 group-hover:text-white transition-colors duration-200">payments</span>
+                    Cashier
+                </a>
+</li>
+<li class="mb-1">
+<a class="flex items-center px-6 py-3 bg-slate-800 text-yellow-500 border-l-4 border-yellow-500 font-semibold font-sans tracking-tight text-sm scale-100 active:scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined mr-4 text-yellow-500">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-6 pt-4 border-t border-slate-800">
+<button class="flex items-center w-full py-2 text-slate-400 hover:text-white transition-colors duration-200 font-label-md text-label-md">
+<span class="material-symbols-outlined mr-3 text-sm">logout</span>
+                Logout
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="ml-[260px] flex-1 flex flex-col min-h-screen relative">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-white/90 backdrop-blur-md text-yellow-600 font-sans text-base docked full-width top-0 sticky z-40 border-b border-stone-200 flat no shadows flex justify-between items-center h-16 px-8">
+<div class="flex items-center gap-4">
+<div class="text-slate-900 font-bold text-lg font-headline-sm text-headline-sm">ERP System</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center border border-stone-200 rounded-lg px-3 py-1.5 bg-surface-container-lowest focus-within:border-yellow-500 focus-within:ring-2 focus-within:ring-yellow-500/20 transition-all mr-4">
+<span class="material-symbols-outlined text-stone-400 mr-2 text-sm">search</span>
+<input class="bg-transparent border-none outline-none text-sm text-stone-600 placeholder-stone-400 w-48 focus:ring-0 p-0 font-body-sm" placeholder="Search..." type="text"/>
+</div>
+<button class="p-2 text-stone-500 hover:bg-stone-50 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500 flex items-center justify-center relative group">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border border-white"></span>
+</button>
+<button class="p-2 text-stone-500 hover:bg-stone-50 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500 flex items-center justify-center">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="p-2 text-stone-500 hover:bg-stone-50 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500 flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-px h-6 bg-stone-200 mx-2"></div>
+<button class="px-4 py-2 text-stone-600 font-label-md text-label-md hover:bg-stone-50 rounded-md border border-transparent hover:border-stone-200 transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+                    Support
+                </button>
+<button class="px-4 py-2 bg-primary-container text-on-primary-container font-label-md text-label-md rounded-md hover:bg-yellow-400 transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500 flex items-center gap-2 border border-yellow-500">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Sale
+                </button>
+<div class="ml-4 w-9 h-9 rounded-full bg-surface-container-highest border border-stone-200 overflow-hidden ml-2 cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<img alt="Administrator Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaFtGmSqEikD6vANCzN4M_1R8VIiP_4yrcjS931Db-GC6N43KuzjNVrhBx_FE182Xf0Z2rpSnddEQOea1hKze6dUDqylDv2NVANhOofsXIUFydt3mpp7-414JRL1i0F3-aYNYb2YMG6Nma5ZuLzVEw4gCwO3QZKZMRUxGUoc4S9MjYxCqpXnW9uJYgCCrakjdDw_y9LvBa6txFS9Xv9-MmrwhP87V4wFwN0eIDflTQNi0_N-6nrIMmUdJLnRNu34SVgvEtWt1XXMU"/>
+</div>
+</div>
+</header>
+<!-- Page ContentCanvas -->
+<main class="flex-1 p-margin bg-background">
+<!-- Page Header -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-xs">Role-Permission Matrix</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                        Manage access control across the ERP system. Configure which roles can perform specific actions within the inventory, sales, and reporting modules.
+                    </p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-surface-container-lowest text-on-surface border border-outline-variant font-label-md text-label-md rounded border hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">undo</span>
+                        Discard Changes
+                    </button>
+<button class="px-6 py-2 bg-primary-container text-on-primary-container font-label-md text-label-md rounded border border-yellow-500 hover:bg-yellow-400 transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                        Save Matrix
+                    </button>
+</div>
+</div>
+<!-- Main Matrix Container -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden" style="box-shadow: 0 4px 20px rgba(154, 52, 18, 0.04);">
+<!-- Table Controls / Filters -->
+<div class="p-md border-b border-outline-variant bg-surface-bright flex justify-between items-center">
+<div class="flex gap-4 items-center">
+<div class="flex items-center gap-2 text-sm">
+<span class="w-3 h-3 rounded-sm bg-primary-container inline-block"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Granted</span>
+</div>
+<div class="flex items-center gap-2 text-sm">
+<span class="w-3 h-3 rounded-sm border border-outline-variant bg-surface-container-lowest inline-block"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Denied</span>
+</div>
+</div>
+<div class="flex gap-3">
+<select class="form-select text-sm py-1.5 pl-3 pr-8 border-outline-variant rounded-md bg-surface-container-lowest text-on-surface focus:border-primary-container focus:ring focus:ring-primary-container/20 font-body-sm">
+<option>All Modules</option>
+<option>Inventory</option>
+<option>Sales &amp; POS</option>
+<option>Reporting</option>
+<option>System Admin</option>
+</select>
+<button class="p-1.5 text-on-surface-variant border border-outline-variant rounded-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+</div>
+<!-- The Matrix Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant w-1/3 min-w-[250px] uppercase tracking-wider sticky left-0 bg-surface-container z-10 border-r border-outline-variant">
+                                    Permission / Action
+                                </th>
+<th class="py-4 px-6 text-center border-r border-outline-variant/50 min-w-[140px]">
+<div class="font-headline-sm text-headline-sm text-on-surface mb-1">Administrator</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Full Access</div>
+</th>
+<th class="py-4 px-6 text-center border-r border-outline-variant/50 min-w-[140px]">
+<div class="font-headline-sm text-headline-sm text-on-surface mb-1">Manager</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Store Operations</div>
+</th>
+<th class="py-4 px-6 text-center border-r border-outline-variant/50 min-w-[140px]">
+<div class="font-headline-sm text-headline-sm text-on-surface mb-1">Cashier</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">POS Only</div>
+</th>
+<th class="py-4 px-6 text-center min-w-[140px]">
+<div class="font-headline-sm text-headline-sm text-on-surface mb-1">Warehouse</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Inventory Only</div>
+</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-outline-variant/50">
+<!-- Module Group Header -->
+<tr class="bg-surface-dim/30">
+<td class="py-2 px-6 font-label-md text-label-md text-primary uppercase tracking-widest bg-surface-container-highest/50" colspan="5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">point_of_sale</span>
+                                        Sales &amp; POS Operations
+                                    </div>
+</td>
+</tr>
+<!-- Row 1 -->
+<tr class="hover:bg-yellow-50/50 transition-colors group">
+<td class="py-3 px-6 border-r border-outline-variant bg-surface-container-lowest group-hover:bg-yellow-50/50 transition-colors sticky left-0 z-10 flex flex-col justify-center h-full">
+<span class="font-medium text-on-surface">Create New Sale</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Process customer transactions via POS.</span>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center opacity-50">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-surface/50 hover:bg-yellow-50/50 transition-colors group">
+<td class="py-3 px-6 border-r border-outline-variant bg-surface group-hover:bg-yellow-50/50 transition-colors sticky left-0 z-10 flex flex-col justify-center h-full">
+<span class="font-medium text-on-surface">Apply Discounts</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Authorize manual price reductions.</span>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center opacity-50">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+</tr>
+<!-- Module Group Header -->
+<tr class="bg-surface-dim/30">
+<td class="py-2 px-6 font-label-md text-label-md text-primary uppercase tracking-widest bg-surface-container-highest/50 border-t border-outline-variant" colspan="5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">inventory_2</span>
+                                        Inventory Management
+                                    </div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-yellow-50/50 transition-colors group">
+<td class="py-3 px-6 border-r border-outline-variant bg-surface-container-lowest group-hover:bg-yellow-50/50 transition-colors sticky left-0 z-10 flex flex-col justify-center h-full">
+<span class="font-medium text-on-surface">Edit Inventory Items</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Modify part details, prices, and stock levels.</span>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center opacity-50">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center bg-surface-container-lowest group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-surface/50 hover:bg-yellow-50/50 transition-colors group">
+<td class="py-3 px-6 border-r border-outline-variant bg-surface group-hover:bg-yellow-50/50 transition-colors sticky left-0 z-10 flex flex-col justify-center h-full">
+<span class="font-medium text-on-surface">Perform Stock Counts</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Submit physical inventory reconciliation.</span>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center border-r border-outline-variant/50 bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center opacity-50">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+<td class="py-3 px-6 text-center bg-surface group-hover:bg-yellow-50/50">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer matrix-checkbox" type="checkbox"/>
+<div class="w-6 h-6 bg-surface-container-lowest border-2 border-outline-variant rounded peer-focus:ring-2 peer-focus:ring-primary-container/50 peer-checked:bg-primary-container peer-checked:border-primary-container transition-all flex items-center justify-center">
+<svg class="w-4 h-4 text-on-primary-container hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+</label>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>
