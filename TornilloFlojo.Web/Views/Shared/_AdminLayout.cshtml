@@ -165,6 +165,9 @@
                     <span>Inventario</span>
                 </a>
             </li>
+            @* ✅ RBAC: El módulo de Usuarios solo es visible para Administradores *@
+            @if (User.IsInRole("Administrador Global") || User.IsInRole("Administrador Local"))
+            {
             <li>
                 <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"
                    asp-controller="Usuarios" asp-action="Index">
@@ -172,6 +175,8 @@
                     <span>Usuarios</span>
                 </a>
             </li>
+            }
+
             <li>
                 <a class="sidebar-link" href="#">
                     <i class="bi bi-sliders"></i>
@@ -185,7 +190,7 @@
                 <i class="bi bi-person-circle fs-3" style="color: var(--gold);"></i>
                 <div style="max-width:160px; overflow:hidden;">
                     <div class="fw-semibold text-white text-truncate" style="font-size:.88rem;">@User.Identity?.Name</div>
-                    <div class="text-truncate" style="font-size:.72rem; color:var(--muted);">Administrador</div>
+                    <div class="text-truncate" style="font-size:.72rem; color:var(--muted);">@User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value</div>
                 </div>
             </div>
         </div>

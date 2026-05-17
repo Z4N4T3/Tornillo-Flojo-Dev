@@ -14,6 +14,13 @@ ERP web para gestión de inventario, facturación y punto de venta de una tienda
 
 ---
 
+## 1.1 Protocolo de Repositorios (Multi-Repo)
+El código se distribuye en dos repositorios distintos. Al pushear, se debe respetar lo siguiente:
+- **Dev / Workspace (Principal):** `https://github.com/Z4N4T3/Tornillo-Flojo-Dev.git` (Todos los archivos y documentación). Todo push estándar debe ir aquí.
+- **Prod / Entrega (Filtrado):** `https://github.com/Z4N4T3/Tornillo-Flojo.git` (Únicamente carpetas `Database` y `TornilloFlojo.Web`). Para actualizar este remoto, se debe aislar el historial de esas dos carpetas sin contaminarlo con el resto del workspace.
+
+---
+
 ## 2. Stack Tecnológico
 
 | Capa | Tecnología |

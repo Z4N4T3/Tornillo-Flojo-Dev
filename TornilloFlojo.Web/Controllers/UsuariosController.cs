@@ -7,7 +7,9 @@ using TornilloFlojo.Web.Models;
 
 namespace TornilloFlojo.Web.Controllers
 {
-    [Authorize]
+    // ✅ RBAC: Solo los administradores pueden gestionar usuarios (permiso USUARIO_GESTIONAR)
+    // Los roles autorizados deben coincidir EXACTAMENTE con los valores en la tabla `rol` de la BD.
+    [Authorize(Roles = "Administrador Global,Administrador Local")]
     public class UsuariosController : Controller
     {
         private readonly string _connectionString;

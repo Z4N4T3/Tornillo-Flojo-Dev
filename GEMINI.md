@@ -9,6 +9,15 @@ Este archivo sirve como "memoria" y bitácora de las decisiones arquitectónicas
 
 ---
 
+## 🚀 Protocolo de Despliegue y Sincronización (Multi-Repo)
+* **Repositorio de Desarrollo (`Tornillo-Flojo-Dev`):** `https://github.com/Z4N4T3/Tornillo-Flojo-Dev.git`
+  * Es el origen actual y contiene TODO el workspace (documentación, diseños, utilidades). Todos los cambios deben subirse aquí.
+* **Repositorio de Producción/Entrega (`Tornillo-Flojo`):** `https://github.com/Z4N4T3/Tornillo-Flojo.git`
+  * Contiene SOLAMENTE las carpetas `Database` y `TornilloFlojo.Web`.
+  * Para sincronizar este repositorio, no se debe hacer push directo, sino filtrar el historial o usar sub-árboles para no contaminarlo con el resto de archivos.
+
+---
+
 ## 📝 Historial de Cambios y Decisiones Clave
 
 ### [Mayo 2026] Preparación del Entorno de Desarrollo (Antigravity)
