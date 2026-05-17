@@ -1,11 +1,7 @@
 USE DB_TornilloFlojo;
 GO
 
--- ==============================================
--- CRUD para tabla 'empleado'
--- ==============================================
 
--- 1. INSERT
 IF OBJECT_ID('usp_Empleado_Insert', 'P') IS NOT NULL DROP PROCEDURE usp_Empleado_Insert;
 GO
 CREATE PROCEDURE usp_Empleado_Insert
@@ -17,7 +13,7 @@ CREATE PROCEDURE usp_Empleado_Insert
     @genero CHAR(1) = NULL,
     @id_cargo INT = NULL,
     @id_sucursal INT = NULL,
-    @id_estado INT = 1, -- 1: Activo
+    @id_estado INT = 1,
     @NuevoId INT OUTPUT
 AS
 BEGIN
@@ -39,11 +35,10 @@ BEGIN
 END
 GO
 
--- 2. GET ALL
 IF OBJECT_ID('usp_Empleado_GetAll', 'P') IS NOT NULL DROP PROCEDURE usp_Empleado_GetAll;
 GO
 CREATE PROCEDURE usp_Empleado_GetAll
-    @id_sucursal INT = NULL -- Opcional para filtrar por sucursal
+    @id_sucursal INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -60,7 +55,6 @@ BEGIN
 END
 GO
 
--- 3. GET BY ID
 IF OBJECT_ID('usp_Empleado_GetById', 'P') IS NOT NULL DROP PROCEDURE usp_Empleado_GetById;
 GO
 CREATE PROCEDURE usp_Empleado_GetById
@@ -80,7 +74,6 @@ BEGIN
 END
 GO
 
--- 4. UPDATE
 IF OBJECT_ID('usp_Empleado_Update', 'P') IS NOT NULL DROP PROCEDURE usp_Empleado_Update;
 GO
 CREATE PROCEDURE usp_Empleado_Update
@@ -121,7 +114,6 @@ BEGIN
 END
 GO
 
--- 5. DELETE (Borrado lógico)
 IF OBJECT_ID('usp_Empleado_Delete', 'P') IS NOT NULL DROP PROCEDURE usp_Empleado_Delete;
 GO
 CREATE PROCEDURE usp_Empleado_Delete
@@ -132,7 +124,6 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
         
-        -- id_estado = 2 (Inactivo)
         UPDATE empleado
         SET id_estado = 2 
         WHERE id = @id;

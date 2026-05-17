@@ -134,7 +134,7 @@
 </head>
 <body>
 
-    <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+    
     <nav class="sidebar" id="sidebar">
 
         <a class="sidebar-brand" href="#">
@@ -166,7 +166,7 @@
                     <span>Inventario</span>
                 </a>
             </li>
-            @* ✅ RBAC: El módulo de Usuarios solo es visible para Administradores *@
+            
             @if (User.IsInRole("Administrador Global") || User.IsInRole("Administrador Local"))
             {
             <li>
@@ -197,10 +197,10 @@
         </div>
     </nav>
 
-    <!-- ── Main wrapper ─────────────────────────────────────────────── -->
+    
     <div class="main-wrapper">
 
-        <!-- Topbar -->
+        
         <header class="top-navbar">
             <div class="d-flex align-items-center gap-3">
                 <button class="sidebar-toggle-btn" id="sidebarToggle" title="Menú">
@@ -223,7 +223,7 @@
             </div>
         </header>
 
-        <!-- Content -->
+        
         <main class="content-body">
             @RenderBody()
         </main>

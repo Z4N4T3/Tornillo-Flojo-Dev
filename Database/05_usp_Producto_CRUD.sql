@@ -1,11 +1,7 @@
 USE DB_TornilloFlojo;
 GO
 
--- ==============================================
--- CRUD para tabla 'producto'
--- ==============================================
 
--- 1. INSERT
 IF OBJECT_ID('usp_Producto_Insert', 'P') IS NOT NULL DROP PROCEDURE usp_Producto_Insert;
 GO
 CREATE PROCEDURE usp_Producto_Insert
@@ -16,7 +12,7 @@ CREATE PROCEDURE usp_Producto_Insert
     @precio_venta DECIMAL(18,2),
     @id_marca INT = NULL,
     @id_categoria INT = NULL,
-    @id_estado INT = 1, -- 1: Activo
+    @id_estado INT = 1,
     @NuevoId INT OUTPUT
 AS
 BEGIN
@@ -24,7 +20,6 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
         
-        -- Calcular nuevo ID manual
         SELECT @NuevoId = ISNULL(MAX(id), 0) + 1 FROM producto WITH (UPDLOCK, SERIALIZABLE);
 
         INSERT INTO producto (id, codigo_parte, nombre, descripcion, precio_costo, precio_venta, id_marca, id_categoria, id_estado)
@@ -39,7 +34,6 @@ BEGIN
 END
 GO
 
--- 2. GET ALL
 IF OBJECT_ID('usp_Producto_GetAll', 'P') IS NOT NULL DROP PROCEDURE usp_Producto_GetAll;
 GO
 CREATE PROCEDURE usp_Producto_GetAll
@@ -54,11 +48,10 @@ BEGIN
     LEFT JOIN producto_marca pm ON p.id_marca = pm.id
     LEFT JOIN producto_categoria pc ON p.id_categoria = pc.id
     INNER JOIN estado e ON p.id_estado = e.id
-    WHERE p.id_estado = 1; -- Solo activos
+    WHERE p.id_estado = 1;
 END
 GO
 
--- 3. GET BY ID
 IF OBJECT_ID('usp_Producto_GetById', 'P') IS NOT NULL DROP PROCEDURE usp_Producto_GetById;
 GO
 CREATE PROCEDURE usp_Producto_GetById
@@ -78,7 +71,6 @@ BEGIN
 END
 GO
 
--- 4. UPDATE
 IF OBJECT_ID('usp_Producto_Update', 'P') IS NOT NULL DROP PROCEDURE usp_Producto_Update;
 GO
 CREATE PROCEDURE usp_Producto_Update
@@ -117,7 +109,6 @@ BEGIN
 END
 GO
 
--- 5. DELETE (Borrado lógico)
 IF OBJECT_ID('usp_Producto_Delete', 'P') IS NOT NULL DROP PROCEDURE usp_Producto_Delete;
 GO
 CREATE PROCEDURE usp_Producto_Delete
@@ -128,7 +119,6 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
         
-        -- id_estado = 2 (Inactivo)
         UPDATE producto
         SET id_estado = 2 
         WHERE id = @id;

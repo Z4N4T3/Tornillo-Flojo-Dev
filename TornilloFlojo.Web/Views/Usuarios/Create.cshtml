@@ -20,7 +20,7 @@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-4"></div>
 
-            <!-- ── Sección 1: Información Personal ─────────────────────── -->
+            
             <h6 class="fw-bold text-uppercase text-muted mb-3 d-flex align-items-center gap-2" style="font-size:.75rem; letter-spacing:.08em;">
                 <i class="bi bi-person-fill text-warning"></i> Información Personal
             </h6>
@@ -59,7 +59,7 @@
 
             <hr class="my-4" />
 
-            <!-- ── Sección 2: Credenciales del Sistema ──────────────────── -->
+            
             <h6 class="fw-bold text-uppercase text-muted mb-3 d-flex align-items-center gap-2" style="font-size:.75rem; letter-spacing:.08em;">
                 <i class="bi bi-shield-lock-fill text-warning"></i> Credenciales de Acceso
             </h6>
@@ -95,7 +95,7 @@
                 <span>La contraseña se guardará como texto plano hasta que se implemente el módulo de hashing. No usar contraseñas reales de producción.</span>
             </div>
 
-            <!-- ── Acciones del Formulario ───────────────────────────────── -->
+            
             <div class="d-flex justify-content-end gap-3 pt-4 border-top mt-4">
                 <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancelar</a>
                 <button type="submit" class="btn btn-warning fw-bold px-4 text-dark">

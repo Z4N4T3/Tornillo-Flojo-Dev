@@ -138,7 +138,7 @@
 
 <div class="container-fluid p-0">
 
-    @* ── Banner para entorno de desarrollo si el SP no existe aún ── *@
+    
     @if (ViewBag.SpPendiente == true)
     {
         <div class="dev-banner mb-4 d-flex align-items-center gap-2">
@@ -150,13 +150,13 @@
         </div>
     }
 
-    @* ── Encabezado de bienvenida ─────────────────────────────────── *@
+    
     <div class="mb-4">
         <h1 class="h2 fw-bold mb-1">¡Hola, @User.Identity?.Name!</h1>
         <p class="text-muted mb-0">Aquí tienes el resumen operativo de hoy — @DateTime.Now.ToString("dddd d 'de' MMMM yyyy", new System.Globalization.CultureInfo("es-NI")).</p>
     </div>
 
-    @* ── Quick Access Bento Grid ──────────────────────────────────── *@
+    
     <div class="row g-3 mb-4">
         <div class="col-12 col-md-4">
             <a href="#" class="bento-card">
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    @* ── KPI Cards ────────────────────────────────────────────────── *@
+    
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
             <div class="kpi-card">
@@ -231,7 +231,7 @@
         </div>
     </div>
 
-    @* ── Gráfico de Barras Semanal ─────────────────────────────────── *@
+    
     <div class="chart-card mb-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="h5 fw-bold mb-0">Rendimiento de Ventas — Últimos 7 días</h3>
@@ -240,7 +240,7 @@
 
         @if (!Model.VentasSemanales.Any())
         {
-            @* Estado vacío elegante *@
+            
             <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
                 <i class="bi bi-bar-chart-line fs-1 mb-3 opacity-25"></i>
                 <p class="mb-0">Sin datos de ventas en los últimos 7 días.</p>

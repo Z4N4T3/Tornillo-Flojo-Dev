@@ -4,22 +4,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Dapper;
 using TornilloFlojo.Web.Models;
-
 namespace TornilloFlojo.Web.Controllers
 {
-    // ✅ RBAC: Solo los administradores pueden gestionar usuarios (permiso USUARIO_GESTIONAR)
-    // Los roles autorizados deben coincidir EXACTAMENTE con los valores en la tabla `rol` de la BD.
     [Authorize(Roles = "Administrador Global,Administrador Local")]
     public class UsuariosController : Controller
     {
         private readonly string _connectionString;
-
         public UsuariosController(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
         }
-
-        // ── INDEX ──────────────────────────────────────────────────────────
         public async Task<IActionResult> Index()
         {
             using var connection = new SqlConnection(_connectionString);
@@ -38,26 +32,19 @@ namespace TornilloFlojo.Web.Controllers
                 LEFT JOIN cargo c ON e.id_cargo = c.id
                 INNER JOIN rol r ON u.id_rol = r.id
                 INNER JOIN estado st ON u.id_estado = st.id";
-
             var usuarios = await connection.QueryAsync<UsuarioListViewModel>(query);
-
             ViewBag.TotalUsuarios = usuarios.Count();
             ViewBag.AdminCount = usuarios.Count(u => u.RolNombre == "Administrador");
             ViewBag.VendedorCount = usuarios.Count(u => u.RolNombre == "Vendedor");
             ViewBag.CajeroCount = usuarios.Count(u => u.RolNombre == "Cajero");
             ViewBag.BodegaCount = usuarios.Count(u => u.RolNombre == "Bodega");
-
             return View(usuarios);
         }
-
-        // ── CREATE GET ─────────────────────────────────────────────────────
         public async Task<IActionResult> Create()
         {
             await CargarDropdowns();
             return View(new UsuarioCreateViewModel());
         }
-
-        // ── CREATE POST ────────────────────────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UsuarioCreateViewModel model)
@@ -67,28 +54,20 @@ namespace TornilloFlojo.Web.Controllers
                 await CargarDropdowns();
                 return View(model);
             }
-
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
-
-            // Verificar que el username no esté ya tomado
             var existe = await connection.ExecuteScalarAsync<int>(
                 "SELECT COUNT(1) FROM usuario WHERE username = @username",
                 new { username = model.Username });
-
             if (existe > 0)
             {
                 ModelState.AddModelError(nameof(model.Username), "Ese nombre de usuario ya está en uso.");
                 await CargarDropdowns();
                 return View(model);
             }
-
-            // ── Paso 1: Insertar Empleado ──────────────────────────────────
-            // Obtener la sucursal del usuario logueado para asignarla al empleado
             var idSucursal = await connection.ExecuteScalarAsync<int?>(
                 "SELECT TOP 1 id_sucursal FROM usuario WHERE username = @username",
                 new { username = User.Identity!.Name });
-
             var pEmpleado = new DynamicParameters();
             pEmpleado.Add("@nombre1",        model.Nombre1);
             pEmpleado.Add("@nombre2",        model.Nombre2);
@@ -100,50 +79,38 @@ namespace TornilloFlojo.Web.Controllers
             pEmpleado.Add("@id_estado",      1);
             pEmpleado.Add("@NuevoId", dbType: System.Data.DbType.Int32,
                           direction: System.Data.ParameterDirection.Output);
-
             await connection.ExecuteAsync(
                 "usp_Empleado_Insert",
                 pEmpleado,
                 commandType: System.Data.CommandType.StoredProcedure);
-
             int idEmpleado = pEmpleado.Get<int>("@NuevoId");
-
-            // ── Paso 2: Insertar Usuario ligado al Empleado ────────────────
             var pUsuario = new DynamicParameters();
             pUsuario.Add("@username",      model.Username);
-            pUsuario.Add("@password_hash", model.PasswordTemporal); // Sin hash por ahora (ver nota)
+            pUsuario.Add("@password_hash", model.PasswordTemporal);
             pUsuario.Add("@id_empleado",   idEmpleado);
             pUsuario.Add("@id_rol",        model.IdRol);
             pUsuario.Add("@id_sucursal",   idSucursal);
             pUsuario.Add("@id_estado",     1);
             pUsuario.Add("@NuevoId", dbType: System.Data.DbType.Int32,
                          direction: System.Data.ParameterDirection.Output);
-
             await connection.ExecuteAsync(
                 "usp_Usuario_Insert",
                 pUsuario,
                 commandType: System.Data.CommandType.StoredProcedure);
-
             TempData["Exito"] = $"Usuario '{model.Username}' creado exitosamente.";
             return RedirectToAction(nameof(Index));
         }
-
-        // ── PERMISOS ───────────────────────────────────────────────────────
         public IActionResult Permisos()
         {
             return View();
         }
-
-        // ── HELPER: Cargar Dropdowns ───────────────────────────────────────
         private async Task CargarDropdowns()
         {
             using var connection = new SqlConnection(_connectionString);
-
             var cargos = await connection.QueryAsync(
                 "SELECT id AS Value, nombre AS Text FROM cargo WHERE id_estado = 1 ORDER BY nombre");
             var roles = await connection.QueryAsync(
                 "SELECT id AS Value, nombre AS Text FROM rol WHERE id_estado = 1 ORDER BY nombre");
-
             ViewBag.Cargos = new SelectList(cargos, "Value", "Text");
             ViewBag.Roles  = new SelectList(roles,  "Value", "Text");
         }

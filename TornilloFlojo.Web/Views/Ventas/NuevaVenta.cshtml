@@ -3,19 +3,19 @@
     Layout = "_AdminLayout";
 }
 
-@* ── Token CSRF requerido por el POST de ProcesarVenta ──────────────── *@
+
 @Html.AntiForgeryToken()
 
 <div class="container-fluid h-100" style="min-height: calc(100vh - 130px);">
     <div class="row h-100 g-3">
         
-        <!-- ═══════════════════════════════════════════════════════════════ -->
-        <!-- Columna Izquierda: Búsqueda y Productos (70%)                 -->
-        <!-- ═══════════════════════════════════════════════════════════════ -->
+        
+        
+        
         <div class="col-12 col-lg-8 d-flex flex-column">
             <div class="card shadow-sm border-0 flex-grow-1 d-flex flex-column h-100" style="background-color: var(--surface-container-lowest);">
                 
-                <!-- Buscador y Filtros -->
+                
                 <div class="card-header bg-white border-bottom p-3">
                     <div class="d-flex gap-2 align-items-center">
                         <div class="input-group">
@@ -28,7 +28,7 @@
                         </button>
                     </div>
                     
-                    <!-- Filtros Rápidos -->
+                    
                     <div class="d-flex gap-2 mt-3 overflow-auto" style="white-space: nowrap; scrollbar-width: none;">
                         <button class="btn btn-sm btn-dark rounded-pill px-3">Todos</button>
                         <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Frenos</button>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <!-- Grilla de Productos (se llena dinámicamente via AJAX) -->
+                
                 <div class="card-body bg-light overflow-auto p-3 flex-grow-1">
                     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3" id="productosGrid">
                         <div class="col-12 text-center text-muted py-5">
@@ -50,13 +50,13 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════════════ -->
-        <!-- Columna Derecha: Carrito de Compras (30%)                     -->
-        <!-- ═══════════════════════════════════════════════════════════════ -->
+        
+        
+        
         <div class="col-12 col-lg-4 d-flex flex-column mt-3 mt-lg-0">
             <div class="card shadow-sm border-0 h-100 d-flex flex-column" style="background-color: var(--surface-container-lowest);">
                 
-                <!-- Cabecera del Carrito -->
+                
                 <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 d-flex align-items-center gap-2 fw-bold" style="color: var(--text);">
                         <i class="bi bi-cart3" style="color: var(--gold);"></i> Venta Actual
@@ -64,7 +64,7 @@
                     <span class="badge bg-light text-dark border font-monospace text-muted">#V-NUEVA</span>
                 </div>
 
-                <!-- Selección de Cliente -->
+                
                 <div class="p-3 bg-white border-bottom">
                     <label class="form-label fw-semibold small text-muted mb-1">
                         <i class="bi bi-person-fill me-1"></i>Cliente
@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <!-- Lista de Productos en el Carrito -->
+                
                 <div class="card-body p-2 bg-light flex-grow-1 overflow-auto" id="carritoItems" style="min-height: 200px;">
                     <div class="text-center text-muted mt-5" id="carritoVacioMsg">
                         <i class="bi bi-cart-x" style="font-size: 3rem;"></i>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
 
-                <!-- Totales y Acciones -->
+                
                 <div class="card-footer bg-white border-top p-3 rounded-bottom">
                     <div class="d-flex justify-content-between mb-2 text-muted small">
                         <span>Subtotal</span>

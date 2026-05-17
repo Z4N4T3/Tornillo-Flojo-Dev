@@ -19,7 +19,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @* ✅ MED-02: Navegación condicional — solo visible para usuarios autenticados *@
+                    
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <ul class="navbar-nav flex-grow-1">

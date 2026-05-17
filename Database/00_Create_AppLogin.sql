@@ -1,9 +1,6 @@
 USE [master];
 GO
 
--- ============================================================
--- Crear Login de SQL Server para la aplicación .NET
--- ============================================================
 IF NOT EXISTS (SELECT name FROM sys.server_principals WHERE name = N'tornillo_app')
 BEGIN
     CREATE LOGIN [tornillo_app]
@@ -18,9 +15,6 @@ BEGIN
 END
 GO
 
--- ============================================================
--- Una vez creada la base de datos, mapear el Login al usuario
--- ============================================================
 USE [DB_TornilloFlojo];
 GO
 
@@ -35,14 +29,9 @@ BEGIN
 END
 GO
 
--- ============================================================
--- Otorgar permisos mínimos necesarios (Principio de mínimo privilegio)
--- La aplicación sólo ejecutará Stored Procedures y hará consultas.
--- No necesita DDL (CREATE TABLE, ALTER, DROP).
--- ============================================================
-ALTER ROLE [db_datareader] ADD MEMBER [tornillo_app]; -- SELECT en todas las tablas
-ALTER ROLE [db_datawriter] ADD MEMBER [tornillo_app]; -- INSERT, UPDATE, DELETE en todas las tablas
-GRANT EXECUTE TO [tornillo_app];                      -- Ejecutar Stored Procedures
+ALTER ROLE [db_datareader] ADD MEMBER [tornillo_app];
+ALTER ROLE [db_datawriter] ADD MEMBER [tornillo_app];
+GRANT EXECUTE TO [tornillo_app];
 GO
 
 PRINT '========================================';

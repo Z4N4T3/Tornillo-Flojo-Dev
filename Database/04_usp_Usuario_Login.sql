@@ -17,6 +17,6 @@ BEGIN
     INNER JOIN rol r ON u.id_rol = r.id
     WHERE u.username = @username 
       AND u.password_hash = @password_hash
-      AND u.id_estado = 1; -- Activo
+      AND u.id_estado = 1;
 END
 GO

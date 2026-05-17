@@ -1,6 +1,6 @@
 # Auditoría de Login — El Tornillo Flojo
 **Fecha:** 2026-05-10  
-**Auditor:** Antigravity (DB Layer)  
+**Auditor:** Desarrollador (DB Layer)  
 **Síntoma reportado:** Al ingresar `admin` / `admin123` en el formulario de login, el sistema no hace nada.
 
 ---

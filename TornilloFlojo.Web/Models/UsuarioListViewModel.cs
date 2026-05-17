@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-
 namespace TornilloFlojo.Web.Models
 {
     public class UsuarioListViewModel

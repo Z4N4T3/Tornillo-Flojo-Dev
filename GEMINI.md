@@ -1,4 +1,4 @@
-# 🤖 Bitácora y Contexto de IA (GEMINI)
+# 🤖 Bitácora y Contexto del Proyecto 
 
 Este archivo sirve como "memoria" y bitácora de las decisiones arquitectónicas, cambios recientes y sugerencias aplicadas al proyecto "Autopartes El Tornillo Flojo". Se actualizará continuamente para mantener el contexto entre sesiones y no saturar el documento oficial del proyecto.
 
@@ -20,11 +20,11 @@ Este archivo sirve como "memoria" y bitácora de las decisiones arquitectónicas
 
 ## 📝 Historial de Cambios y Decisiones Clave
 
-### [Mayo 2026] Preparación del Entorno de Desarrollo (Antigravity)
+### [Mayo 2026] Preparación del Entorno de Desarrollo 
 * **Contexto:** Se requiere configurar el ambiente para iniciar el desarrollo del backend en .NET.
 * **Acciones:**
-  * Se instaló la extensión **C# Dev Kit** (`ms-dotnettools.csdevkit`) y sus dependencias (`C#` y `.NET Runtime`) directamente en Antigravity.
-  * Se confirmó que Antigravity está configurado para utilizar el marketplace oficial de VS Code.
+  * Se instaló la extensión **C# Dev Kit** (`ms-dotnettools.csdevkit`) y sus dependencias (`C#` y `.NET Runtime`) directamente en el entorno.
+  * Se confirmó que el entorno está configurado para utilizar el marketplace oficial de VS Code.
 * **Estado:** Extensión instalada con éxito. Pendiente verificación de compilación una vez se cree la solución.
 
 ### [Mayo 2026] Setup de Frontend y UI de Prueba (StitchMCP)

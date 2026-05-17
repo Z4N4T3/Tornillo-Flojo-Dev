@@ -1,11 +1,7 @@
 USE DB_TornilloFlojo;
 GO
 
--- ==============================================
--- CRUD para tabla 'usuario'
--- ==============================================
 
--- 1. INSERT
 IF OBJECT_ID('usp_Usuario_Insert', 'P') IS NOT NULL DROP PROCEDURE usp_Usuario_Insert;
 GO
 CREATE PROCEDURE usp_Usuario_Insert
@@ -14,7 +10,7 @@ CREATE PROCEDURE usp_Usuario_Insert
     @id_empleado INT = NULL,
     @id_rol INT = NULL,
     @id_sucursal INT = NULL,
-    @id_estado INT = 1, -- 1: Activo
+    @id_estado INT = 1,
     @NuevoId INT OUTPUT
 AS
 BEGIN
@@ -36,15 +32,13 @@ BEGIN
 END
 GO
 
--- 2. GET ALL
 IF OBJECT_ID('usp_Usuario_GetAll', 'P') IS NOT NULL DROP PROCEDURE usp_Usuario_GetAll;
 GO
 CREATE PROCEDURE usp_Usuario_GetAll
-    @id_sucursal INT = NULL -- Opcional para filtrar por sucursal
+    @id_sucursal INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
-    -- No devolvemos password_hash por seguridad
     SELECT u.id, u.username, u.fecha_creacion,
            u.id_empleado, e.nombre1 + ' ' + e.apellido1 AS empleado_nombre,
            u.id_rol, r.nombre AS rol_nombre,
@@ -60,7 +54,6 @@ BEGIN
 END
 GO
 
--- 3. GET BY ID
 IF OBJECT_ID('usp_Usuario_GetById', 'P') IS NOT NULL DROP PROCEDURE usp_Usuario_GetById;
 GO
 CREATE PROCEDURE usp_Usuario_GetById
@@ -82,7 +75,6 @@ BEGIN
 END
 GO
 
--- 4. UPDATE
 IF OBJECT_ID('usp_Usuario_Update', 'P') IS NOT NULL DROP PROCEDURE usp_Usuario_Update;
 GO
 CREATE PROCEDURE usp_Usuario_Update
@@ -98,7 +90,6 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
         
-        -- No actualizamos password_hash aquí. Usar SP específico para cambiar contraseña.
         UPDATE usuario
         SET username = @username,
             id_empleado = @id_empleado,
@@ -116,7 +107,6 @@ BEGIN
 END
 GO
 
--- 5. DELETE (Borrado lógico)
 IF OBJECT_ID('usp_Usuario_Delete', 'P') IS NOT NULL DROP PROCEDURE usp_Usuario_Delete;
 GO
 CREATE PROCEDURE usp_Usuario_Delete
@@ -127,7 +117,6 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
         
-        -- id_estado = 2 (Inactivo)
         UPDATE usuario
         SET id_estado = 2 
         WHERE id = @id;

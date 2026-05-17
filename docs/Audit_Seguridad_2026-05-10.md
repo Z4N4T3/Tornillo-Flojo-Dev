@@ -1,6 +1,6 @@
 # 🔒 Auditoría Exhaustiva de Seguridad — TornilloFlojo.Web
 **Fecha:** 2026-05-10  
-**Auditor:** Antigravity  
+**Auditor:** Desarrollador  
 **Alcance:** Proyecto completo `TornilloFlojo.Web` — Autenticación, Autorización, Configuración, Manejo de Errores, Exposición de Datos.
 
 ---

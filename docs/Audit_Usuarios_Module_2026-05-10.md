@@ -1,6 +1,6 @@
 # Auditoría del Módulo de Usuarios — El Tornillo Flojo
 **Fecha:** 2026-05-10  
-**Auditor:** Antigravity (App Layer)  
+**Auditor:** Desarrollador (App Layer)  
 **Síntoma reportado:** Las vistas del módulo `/Usuarios` muestran datos estáticos hardcodeados en lugar de información real de la base de datos.
 
 ---
