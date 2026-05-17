@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Dapper;
 using TornilloFlojo.Web.Models;
 
 namespace TornilloFlojo.Web.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly string _connectionString;
@@ -14,6 +17,7 @@ namespace TornilloFlojo.Web.Controllers
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
         }
 
+        // ── INDEX ──────────────────────────────────────────────────────────
         public async Task<IActionResult> Index()
         {
             using var connection = new SqlConnection(_connectionString);
@@ -32,45 +36,114 @@ namespace TornilloFlojo.Web.Controllers
                 LEFT JOIN cargo c ON e.id_cargo = c.id
                 INNER JOIN rol r ON u.id_rol = r.id
                 INNER JOIN estado st ON u.id_estado = st.id";
-                
-            IEnumerable<UsuarioListViewModel> usuarios;
-            try
-            {
-                usuarios = await connection.QueryAsync<UsuarioListViewModel>(query);
-            }
-            catch (Exception)
-            {
-                // Fallback de prueba si las tablas no existen, están vacías o la conexión falla
-                usuarios = new List<UsuarioListViewModel>
-                {
-                    new UsuarioListViewModel { Id = 1, EmpleadoNombre = "Roberto Carlos", Identificacion = "EMP-001", Contacto = "roberto@tornilloflojo.com", CargoNombre = "Gerente General", RolNombre = "admin", EstadoNombre = "Activo", Iniciales = "RC" },
-                    new UsuarioListViewModel { Id = 2, EmpleadoNombre = "Maria Garcia", Identificacion = "EMP-042", Contacto = "mgarcia@tornilloflojo.com", CargoNombre = "Vendedora Mostrador", RolNombre = "seller", EstadoNombre = "Activo", Iniciales = "MG" },
-                    new UsuarioListViewModel { Id = 3, EmpleadoNombre = "Juan Lopez", Identificacion = "EMP-088", Contacto = "jlopez@tornilloflojo.com", CargoNombre = "Cajero Principal", RolNombre = "cashier", EstadoNombre = "Inactivo", Iniciales = "JL" }
-                };
-            }
+
+            var usuarios = await connection.QueryAsync<UsuarioListViewModel>(query);
+
+            ViewBag.TotalUsuarios = usuarios.Count();
+            ViewBag.AdminCount = usuarios.Count(u => u.RolNombre == "Administrador");
+            ViewBag.VendedorCount = usuarios.Count(u => u.RolNombre == "Vendedor");
+            ViewBag.CajeroCount = usuarios.Count(u => u.RolNombre == "Cajero");
+            ViewBag.BodegaCount = usuarios.Count(u => u.RolNombre == "Bodega");
 
             return View(usuarios);
         }
 
-        public IActionResult Create()
+        // ── CREATE GET ─────────────────────────────────────────────────────
+        public async Task<IActionResult> Create()
         {
-            return View();
+            await CargarDropdowns();
+            return View(new UsuarioCreateViewModel());
         }
 
+        // ── CREATE POST ────────────────────────────────────────────────────
         [HttpPost]
-        public IActionResult Create(UsuarioCreateViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(UsuarioCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // TODO: Lógica para insertar en empleado y usuario mediante SP
-                return RedirectToAction(nameof(Index));
+                await CargarDropdowns();
+                return View(model);
             }
-            return View(model);
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            // Verificar que el username no esté ya tomado
+            var existe = await connection.ExecuteScalarAsync<int>(
+                "SELECT COUNT(1) FROM usuario WHERE username = @username",
+                new { username = model.Username });
+
+            if (existe > 0)
+            {
+                ModelState.AddModelError(nameof(model.Username), "Ese nombre de usuario ya está en uso.");
+                await CargarDropdowns();
+                return View(model);
+            }
+
+            // ── Paso 1: Insertar Empleado ──────────────────────────────────
+            // Obtener la sucursal del usuario logueado para asignarla al empleado
+            var idSucursal = await connection.ExecuteScalarAsync<int?>(
+                "SELECT TOP 1 id_sucursal FROM usuario WHERE username = @username",
+                new { username = User.Identity!.Name });
+
+            var pEmpleado = new DynamicParameters();
+            pEmpleado.Add("@nombre1",        model.Nombre1);
+            pEmpleado.Add("@nombre2",        model.Nombre2);
+            pEmpleado.Add("@apellido1",      model.Apellido1);
+            pEmpleado.Add("@apellido2",      model.Apellido2);
+            pEmpleado.Add("@identificacion", model.Identificacion);
+            pEmpleado.Add("@id_cargo",       model.IdCargo);
+            pEmpleado.Add("@id_sucursal",    idSucursal);
+            pEmpleado.Add("@id_estado",      1);
+            pEmpleado.Add("@NuevoId", dbType: System.Data.DbType.Int32,
+                          direction: System.Data.ParameterDirection.Output);
+
+            await connection.ExecuteAsync(
+                "usp_Empleado_Insert",
+                pEmpleado,
+                commandType: System.Data.CommandType.StoredProcedure);
+
+            int idEmpleado = pEmpleado.Get<int>("@NuevoId");
+
+            // ── Paso 2: Insertar Usuario ligado al Empleado ────────────────
+            var pUsuario = new DynamicParameters();
+            pUsuario.Add("@username",      model.Username);
+            pUsuario.Add("@password_hash", model.PasswordTemporal); // Sin hash por ahora (ver nota)
+            pUsuario.Add("@id_empleado",   idEmpleado);
+            pUsuario.Add("@id_rol",        model.IdRol);
+            pUsuario.Add("@id_sucursal",   idSucursal);
+            pUsuario.Add("@id_estado",     1);
+            pUsuario.Add("@NuevoId", dbType: System.Data.DbType.Int32,
+                         direction: System.Data.ParameterDirection.Output);
+
+            await connection.ExecuteAsync(
+                "usp_Usuario_Insert",
+                pUsuario,
+                commandType: System.Data.CommandType.StoredProcedure);
+
+            TempData["Exito"] = $"Usuario '{model.Username}' creado exitosamente.";
+            return RedirectToAction(nameof(Index));
         }
 
+        // ── PERMISOS ───────────────────────────────────────────────────────
         public IActionResult Permisos()
         {
             return View();
+        }
+
+        // ── HELPER: Cargar Dropdowns ───────────────────────────────────────
+        private async Task CargarDropdowns()
+        {
+            using var connection = new SqlConnection(_connectionString);
+
+            var cargos = await connection.QueryAsync(
+                "SELECT id AS Value, nombre AS Text FROM cargo WHERE id_estado = 1 ORDER BY nombre");
+            var roles = await connection.QueryAsync(
+                "SELECT id AS Value, nombre AS Text FROM rol WHERE id_estado = 1 ORDER BY nombre");
+
+            ViewBag.Cargos = new SelectList(cargos, "Value", "Text");
+            ViewBag.Roles  = new SelectList(roles,  "Value", "Text");
         }
     }
 }

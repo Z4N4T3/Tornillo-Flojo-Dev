@@ -1,6 +1,15 @@
 USE [DB_TornilloFlojo];
 GO
 
+PRINT 'Insertando Barrio (Prerrequisito para Sucursal)...';
+-- Aseguramos que exista al menos un barrio para la sucursal matriz
+IF NOT EXISTS (SELECT 1 FROM barrio WHERE id = 1)
+BEGIN
+    -- id_mun 46 = Managua
+    INSERT INTO barrio (id, nombre, id_mun) VALUES (1, 'Bello Horizonte', 46);
+END
+GO
+
 PRINT 'Insertando Sucursal Matriz (Prerrequisito)...';
 -- Necesitamos una sucursal física para poder asignar al empleado y al usuario.
 IF NOT EXISTS (SELECT 1 FROM sucursal WHERE id = 1)

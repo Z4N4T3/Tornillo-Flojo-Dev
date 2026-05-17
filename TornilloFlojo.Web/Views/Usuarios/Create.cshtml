@@ -1,120 +1,111 @@
 @model TornilloFlojo.Web.Models.UsuarioCreateViewModel
 @{
     ViewData["Title"] = "Crear Nuevo Usuario";
+    Layout = "_AdminLayout";
 }
 
-<div class="mb-4">
-    <h2 class="mb-1">Crear Nuevo Usuario</h2>
-    <p class="text-muted">Agregue un nuevo empleado al sistema y configure sus permisos de acceso.</p>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Crear Nuevo Usuario</h1>
+        <p class="text-muted mb-0">Agrega un empleado al sistema y configura sus credenciales de acceso.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
 </div>
 
-<div class="card shadow-sm border-0 mb-4">
+<div class="card border shadow-sm">
     <div class="card-body p-4">
         <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            
-            <!-- Personal Information -->
-            <div class="mb-5">
-                <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
-                    <i class="bi bi-person-fill text-warning"></i> Información Personal
-                </h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label asp-for="NombreCompleto" class="form-label text-muted small text-uppercase fw-bold">Nombre Completo</label>
-                        <input asp-for="NombreCompleto" class="form-control" placeholder="Ej. Juan Pérez">
-                        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="Identificacion" class="form-label text-muted small text-uppercase fw-bold">Número de Identificación (Cédula)</label>
-                        <input asp-for="Identificacion" class="form-control" placeholder="000-000000-0000A">
-                        <span asp-validation-for="Identificacion" class="text-danger small"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="Email" class="form-label text-muted small text-uppercase fw-bold">Correo Electrónico</label>
-                        <input asp-for="Email" class="form-control" placeholder="juan.perez@tornilloflojo.com">
-                        <span asp-validation-for="Email" class="text-danger small"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="Telefono" class="form-label text-muted small text-uppercase fw-bold">Teléfono</label>
-                        <input asp-for="Telefono" class="form-control" placeholder="+505 8888 8888">
-                        <span asp-validation-for="Telefono" class="text-danger small"></span>
-                    </div>
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-4"></div>
+
+            <!-- ── Sección 1: Información Personal ─────────────────────── -->
+            <h6 class="fw-bold text-uppercase text-muted mb-3 d-flex align-items-center gap-2" style="font-size:.75rem; letter-spacing:.08em;">
+                <i class="bi bi-person-fill text-warning"></i> Información Personal
+            </h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <label asp-for="Nombre1" class="form-label small fw-semibold">Primer Nombre *</label>
+                    <input asp-for="Nombre1" class="form-control" placeholder="Ej. Juan" />
+                    <span asp-validation-for="Nombre1" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Nombre2" class="form-label small fw-semibold">Segundo Nombre</label>
+                    <input asp-for="Nombre2" class="form-control" placeholder="Ej. Carlos" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Apellido1" class="form-label small fw-semibold">Primer Apellido *</label>
+                    <input asp-for="Apellido1" class="form-control" placeholder="Ej. Pérez" />
+                    <span asp-validation-for="Apellido1" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Apellido2" class="form-label small fw-semibold">Segundo Apellido</label>
+                    <input asp-for="Apellido2" class="form-control" placeholder="Ej. García" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Identificacion" class="form-label small fw-semibold">Cédula / Identificación *</label>
+                    <input asp-for="Identificacion" class="form-control" placeholder="000-000000-0000A" />
+                    <span asp-validation-for="Identificacion" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="IdCargo" class="form-label small fw-semibold">Cargo *</label>
+                    <select asp-for="IdCargo" asp-items="ViewBag.Cargos" class="form-select">
+                        <option value="">— Seleccione un cargo —</option>
+                    </select>
+                    <span asp-validation-for="IdCargo" class="text-danger small"></span>
                 </div>
             </div>
 
-            <!-- Employment Details & Profile Picture Grid -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-8">
-                    <div class="mb-5">
-                        <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-briefcase-fill text-warning"></i> Detalles de Empleo
-                        </h5>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label asp-for="IdCargo" class="form-label text-muted small text-uppercase fw-bold">Cargo</label>
-                                <select asp-for="IdCargo" class="form-select">
-                                    <option value="">Seleccione un cargo</option>
-                                    <option value="1">Gerente General</option>
-                                    <option value="2">Gerente de Tienda</option>
-                                    <option value="3">Vendedor Mostrador</option>
-                                    <option value="4">Cajero</option>
-                                    <option value="5">Bodeguero</option>
-                                </select>
-                                <span asp-validation-for="IdCargo" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="IdRol" class="form-label text-muted small text-uppercase fw-bold">Rol del Sistema</label>
-                                <select asp-for="IdRol" class="form-select">
-                                    <option value="">Seleccione un rol</option>
-                                    <option value="1">Administrador</option>
-                                    <option value="2">Vendedor</option>
-                                    <option value="3">Cajero</option>
-                                    <option value="4">Bodega</option>
-                                </select>
-                                <span asp-validation-for="IdRol" class="text-danger small"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-shield-lock-fill text-warning"></i> Seguridad de Cuenta
-                        </h5>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label asp-for="Username" class="form-label text-muted small text-uppercase fw-bold">Nombre de Usuario</label>
-                                <input asp-for="Username" class="form-control" placeholder="jperez">
-                                <span asp-validation-for="Username" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="PasswordTemporal" class="form-label text-muted small text-uppercase fw-bold">Contraseña Temporal</label>
-                                <input asp-for="PasswordTemporal" class="form-control" placeholder="••••••••">
-                                <div class="form-text small">El usuario deberá cambiarla al iniciar sesión.</div>
-                                <span asp-validation-for="PasswordTemporal" class="text-danger small"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <hr class="my-4" />
 
-                <!-- Profile Picture -->
-                <div class="col-md-4 border-start d-none d-md-block">
-                    <h5 class="text-primary border-bottom pb-2 mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-person-bounding-box text-warning"></i> Fotografía
-                    </h5>
-                    <div class="border border-2 border-dashed border-secondary rounded p-4 text-center bg-light d-flex flex-column align-items-center justify-content-center cursor-pointer" style="height: 200px;">
-                        <i class="bi bi-camera text-muted fs-1 mb-2"></i>
-                        <p class="text-muted mb-0 small">Haz clic para subir foto</p>
-                        <p class="text-secondary mt-1 small" style="font-size: 0.75rem;">JPG, PNG (Max. 2MB)</p>
+            <!-- ── Sección 2: Credenciales del Sistema ──────────────────── -->
+            <h6 class="fw-bold text-uppercase text-muted mb-3 d-flex align-items-center gap-2" style="font-size:.75rem; letter-spacing:.08em;">
+                <i class="bi bi-shield-lock-fill text-warning"></i> Credenciales de Acceso
+            </h6>
+            <div class="row g-3 mb-2">
+                <div class="col-md-4">
+                    <label asp-for="Username" class="form-label small fw-semibold">Nombre de Usuario *</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-at"></i></span>
+                        <input asp-for="Username" class="form-control" placeholder="jperez" autocomplete="off" />
                     </div>
+                    <span asp-validation-for="Username" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="PasswordTemporal" class="form-label small fw-semibold">Contraseña Temporal *</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-key"></i></span>
+                        <input asp-for="PasswordTemporal" type="password" class="form-control" placeholder="••••••••" autocomplete="new-password" />
+                    </div>
+                    <div class="form-text">El usuario deberá cambiarla al primer inicio de sesión.</div>
+                    <span asp-validation-for="PasswordTemporal" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="IdRol" class="form-label small fw-semibold">Rol del Sistema *</label>
+                    <select asp-for="IdRol" asp-items="ViewBag.Roles" class="form-select">
+                        <option value="">— Seleccione un rol —</option>
+                    </select>
+                    <span asp-validation-for="IdRol" class="text-danger small"></span>
                 </div>
             </div>
 
-            <!-- Form Actions -->
-            <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                <a asp-action="Index" class="btn btn-outline-danger fw-bold px-4 text-uppercase">Cancelar</a>
-                <button type="submit" class="btn btn-danger fw-bold px-4 text-uppercase d-flex align-items-center gap-2">
-                    <i class="bi bi-save"></i> Guardar Usuario
+            <div class="alert alert-warning py-2 mt-3 small d-flex align-items-center gap-2">
+                <i class="bi bi-info-circle-fill"></i>
+                <span>La contraseña se guardará como texto plano hasta que se implemente el módulo de hashing. No usar contraseñas reales de producción.</span>
+            </div>
+
+            <!-- ── Acciones del Formulario ───────────────────────────────── -->
+            <div class="d-flex justify-content-end gap-3 pt-4 border-top mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancelar</a>
+                <button type="submit" class="btn btn-warning fw-bold px-4 text-dark">
+                    <i class="bi bi-person-plus-fill me-2"></i>Guardar Usuario
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

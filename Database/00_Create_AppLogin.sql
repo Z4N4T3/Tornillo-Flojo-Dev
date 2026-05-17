@@ -48,5 +48,5 @@ GO
 PRINT '========================================';
 PRINT 'Setup completado.';
 PRINT 'Connection String para appsettings.json:';
-PRINT 'Server=0.0.0.0;Database=DB_TornilloFlojo;User Id=tornillo_app;Password=TornilloApp#2026!;TrustServerCertificate=True;';
+PRINT 'Server=Z4n4t3\SQLEXPRESS;Database=DB_TornilloFlojo;User Id=tornillo_app;Password=TornilloApp#2026!;TrustServerCertificate=True;MultipleActiveResultSets=True;';
 PRINT '========================================';

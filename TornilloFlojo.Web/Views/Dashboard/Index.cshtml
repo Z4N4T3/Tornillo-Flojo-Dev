@@ -1,0 +1,274 @@
+@model TornilloFlojo.Web.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    /* ─── Design Tokens (Granada Colonial Modern) ────────────────── */
+    :root {
+        --gold:    #eab308;
+        --gold-lt: rgba(234,179,8,.12);
+        --terra:   #a53c19;
+        --slate:   #0f172a;
+        --surface: #ffffff;
+        --bg:      #f8f9ff;
+        --border:  #e2e8f0;
+        --text:    #0d1c2e;
+        --muted:   #64748b;
+    }
+
+    /* ─── Quick Access Bento ─────────────────────────────────────── */
+    .bento-card {
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: .75rem;
+        color: var(--text);
+        text-decoration: none;
+        transition: border-color .2s, transform .2s, box-shadow .2s;
+        height: 100%;
+    }
+    .bento-card:hover {
+        color: var(--text);
+        border-color: var(--gold);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px -8px rgba(234,179,8,.15);
+    }
+    .bento-icon {
+        width: 48px; height: 48px;
+        background: var(--gold-lt);
+        color: #b45309;
+        border-radius: .5rem;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        transition: background .2s;
+    }
+    .bento-card:hover .bento-icon { background: rgba(234,179,8,.22); }
+
+    /* ─── KPI Cards ──────────────────────────────────────────────── */
+    .kpi-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: .625rem;
+        padding: 1.25rem;
+        height: 100%;
+    }
+    .kpi-label {
+        font-size: .7rem; font-weight: 700;
+        letter-spacing: .07em; text-transform: uppercase;
+        color: var(--muted); margin-bottom: .5rem;
+    }
+    .kpi-value {
+        font-size: 2rem; font-weight: 700;
+        letter-spacing: -.03em; line-height: 1;
+        color: var(--text);
+    }
+    .kpi-value.danger  { color: #dc2626; }
+    .kpi-value.success { color: #16a34a; }
+
+    /* ─── Bar Chart ──────────────────────────────────────────────── */
+    .chart-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: .75rem;
+        padding: 1.5rem;
+    }
+    .chart-area {
+        height: 220px;
+        display: flex;
+        align-items: flex-end;
+        gap: 0;
+        border-bottom: 1px solid var(--border);
+        padding: 0 .5rem;
+    }
+    .bar-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        gap: .375rem;
+        height: 100%;
+    }
+    .bar {
+        width: 60%;
+        min-height: 4px;
+        background: var(--gold);
+        border-radius: .25rem .25rem 0 0;
+        transition: background .2s, transform .15s;
+        cursor: default;
+        position: relative;
+    }
+    .bar:hover { background: #ca9b06; transform: scaleY(1.03); }
+    .bar-today { background: var(--terra) !important; }
+    .bar-today:hover { background: #8b3212 !important; }
+    .bar-label { font-size: .7rem; font-weight: 600; color: var(--muted); }
+
+    /* Tooltip on hover */
+    .bar[title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: 105%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--slate);
+        color: #fff;
+        font-size: .7rem;
+        padding: .2rem .45rem;
+        border-radius: .25rem;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    /* ─── Alert Banner ───────────────────────────────────────────── */
+    .dev-banner {
+        background: #fef9c3;
+        border: 1px solid #fde047;
+        border-radius: .5rem;
+        padding: .75rem 1rem;
+        font-size: .85rem;
+        color: #713f12;
+    }
+</style>
+
+<div class="container-fluid p-0">
+
+    @* ── Banner para entorno de desarrollo si el SP no existe aún ── *@
+    @if (ViewBag.SpPendiente == true)
+    {
+        <div class="dev-banner mb-4 d-flex align-items-center gap-2">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <strong>SP pendiente:</strong>
+            El SP <code>usp_Dashboard_GetResumen</code> no existe todavía en la base de datos.
+            Ejecutar <code>Database/08_usp_Dashboard.sql</code> para activar los datos reales.
+            Los KPIs se muestran en <strong>cero</strong> hasta entonces.
+        </div>
+    }
+
+    @* ── Encabezado de bienvenida ─────────────────────────────────── *@
+    <div class="mb-4">
+        <h1 class="h2 fw-bold mb-1">¡Hola, @User.Identity?.Name!</h1>
+        <p class="text-muted mb-0">Aquí tienes el resumen operativo de hoy — @DateTime.Now.ToString("dddd d 'de' MMMM yyyy", new System.Globalization.CultureInfo("es-NI")).</p>
+    </div>
+
+    @* ── Quick Access Bento Grid ──────────────────────────────────── *@
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+            <a href="#" class="bento-card">
+                <div class="bento-icon"><i class="bi bi-cart3"></i></div>
+                <h3 class="h6 fw-bold mb-1">Realizar Venta</h3>
+                <p class="text-muted small mb-0">Acceso rápido al punto de venta y cotizaciones.</p>
+            </a>
+        </div>
+        <div class="col-12 col-md-4">
+            <a href="#" class="bento-card">
+                <div class="bento-icon"><i class="bi bi-box-seam"></i></div>
+                <h3 class="h6 fw-bold mb-1">Ingresar Mercadería</h3>
+                <p class="text-muted small mb-0">Registrar nuevos lotes de repuestos al Kardex.</p>
+            </a>
+        </div>
+        <div class="col-12 col-md-4">
+            <a href="#" class="bento-card">
+                <div class="bento-icon"><i class="bi bi-cash-coin"></i></div>
+                <h3 class="h6 fw-bold mb-1">Arqueo de Caja</h3>
+                <p class="text-muted small mb-0">Iniciar, auditar y cerrar turno de caja chica.</p>
+            </a>
+        </div>
+    </div>
+
+    @* ── KPI Cards ────────────────────────────────────────────────── *@
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="kpi-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="kpi-label">Ventas del Día</span>
+                    <i class="bi bi-graph-up-arrow text-success small"></i>
+                </div>
+                <div class="kpi-value mt-2">@Model.VentasHoy</div>
+                <div class="mt-2 small text-muted">facturas emitidas hoy</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="kpi-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="kpi-label">Bajo Stock</span>
+                    <i class="bi bi-exclamation-triangle text-danger small"></i>
+                </div>
+                <div class="kpi-value mt-2 @(Model.ProductosBajoStock > 0 ? "danger" : "")">
+                    @Model.ProductosBajoStock
+                </div>
+                <div class="mt-2 small @(Model.ProductosBajoStock > 0 ? "text-danger" : "text-muted")">
+                    @(Model.ProductosBajoStock > 0 ? "productos bajo mínimo" : "inventario al día")
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="kpi-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="kpi-label">Clientes Atendidos</span>
+                    <i class="bi bi-people text-muted small"></i>
+                </div>
+                <div class="kpi-value mt-2">@Model.ClientesAtendidosHoy</div>
+                <div class="mt-2 small text-muted">clientes únicos hoy</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="kpi-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="kpi-label">Ingresos Totales</span>
+                    <i class="bi bi-wallet2 text-warning small"></i>
+                </div>
+                <div class="kpi-value mt-2 success">
+                    C$ @Model.IngresosTotalesHoy.ToString("N0")
+                </div>
+                <div class="mt-2 small text-muted">acumulado del día</div>
+            </div>
+        </div>
+    </div>
+
+    @* ── Gráfico de Barras Semanal ─────────────────────────────────── *@
+    <div class="chart-card mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="h5 fw-bold mb-0">Rendimiento de Ventas — Últimos 7 días</h3>
+            <span class="badge bg-light text-dark border px-3 py-2">C$ — Córdobas</span>
+        </div>
+
+        @if (!Model.VentasSemanales.Any())
+        {
+            @* Estado vacío elegante *@
+            <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
+                <i class="bi bi-bar-chart-line fs-1 mb-3 opacity-25"></i>
+                <p class="mb-0">Sin datos de ventas en los últimos 7 días.</p>
+                <small>Los datos aparecerán aquí una vez se registren facturas.</small>
+            </div>
+        }
+        else
+        {
+            <div class="chart-area">
+                @{
+                    var maxValor = Model.MaxVentaSemanal;
+                    var hoy      = DateTime.Today;
+                }
+                @foreach (var dia in Model.VentasSemanales)
+                {
+                    var altura  = dia.AlturaRelativa(maxValor);
+                    var esHoy   = dia.Fecha.Date == hoy;
+                    var tooltip = $"C$ {dia.TotalVentas:N0} — {dia.CantidadVentas} venta(s)";
+                    <div class="bar-col">
+                        <div class="bar @(esHoy ? "bar-today" : "")"
+                             style="height: @(altura)%;"
+                             title="@tooltip">
+                        </div>
+                        <span class="bar-label">@dia.DiaNombre</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+</div>

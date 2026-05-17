@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - El Tornillo Flojo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --gold:    #eab308;
+            --gold-lt: rgba(234,179,8,.1);
+            --slate:   #0f172a;
+            --bg:      #f8f9ff;
+            --surface: #ffffff;
+            --border:  #e2e8f0;
+            --text:    #0d1c2e;
+            --muted:   #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────── */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
+            background-color: var(--slate);
+            border-right: 1px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            transition: left .3s ease;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .5rem .75rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-decoration: none;
+        }
+        .sidebar-brand:hover { color: #fff; }
+        .sidebar-brand i { color: var(--gold); font-size: 1.5rem; }
+        .sidebar-brand h1 {
+            font-weight: 800; font-size: 1rem;
+            margin: 0; letter-spacing: .06em; text-transform: uppercase;
+        }
+        .sidebar-brand p { font-size: .72rem; color: var(--muted); margin: 0; }
+
+        .sidebar-menu {
+            list-style: none; padding: 0; margin: 0;
+            flex-grow: 1;
+            display: flex; flex-direction: column; gap: .375rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .7rem 1rem;
+            color: var(--muted);
+            text-decoration: none;
+            border-radius: .375rem;
+            font-weight: 500;
+            font-size: .9rem;
+            transition: all .18s ease;
+        }
+        .sidebar-link:hover { color: #fff; background: rgba(255,255,255,.06); }
+        .sidebar-link.active {
+            color: var(--slate) !important;
+            background: var(--gold);
+            font-weight: 700;
+        }
+        .sidebar-link i { font-size: 1.15rem; }
+
+        .sidebar-footer {
+            padding-top: 1rem;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* ── Main wrapper ────────────────────────────────────── */
+        .main-wrapper {
+            margin-left: 260px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Topbar ──────────────────────────────────────────── */
+        .top-navbar {
+            height: 64px;
+            background: rgba(255,255,255,.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 90;
+        }
+
+        /* ── Content body ────────────────────────────────────── */
+        .content-body {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+
+        /* ── Mobile toggle ───────────────────────────────────── */
+        .sidebar-toggle-btn {
+            display: none;
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; padding: .5rem;
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar { left: -260px; }
+            .sidebar.open { left: 0; }
+            .main-wrapper { margin-left: 0; }
+            .sidebar-toggle-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+    <nav class="sidebar" id="sidebar">
+
+        <a class="sidebar-brand" href="#">
+            <i class="bi bi-gear-fill"></i>
+            <div>
+                <h1>Tornillo Flojo</h1>
+                <p>Granada, Nicaragua</p>
+            </div>
+        </a>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+                   asp-controller="Dashboard" asp-action="Index">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a class="sidebar-link" href="#">
+                    <i class="bi bi-cart3"></i>
+                    <span>Nueva Venta / POS</span>
+                </a>
+            </li>
+            <li>
+                <a class="sidebar-link" href="#">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Inventario</span>
+                </a>
+            </li>
+            <li>
+                <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"
+                   asp-controller="Usuarios" asp-action="Index">
+                    <i class="bi bi-people"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
+            <li>
+                <a class="sidebar-link" href="#">
+                    <i class="bi bi-sliders"></i>
+                    <span>Ajustes</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-person-circle fs-3" style="color: var(--gold);"></i>
+                <div style="max-width:160px; overflow:hidden;">
+                    <div class="fw-semibold text-white text-truncate" style="font-size:.88rem;">@User.Identity?.Name</div>
+                    <div class="text-truncate" style="font-size:.72rem; color:var(--muted);">Administrador</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── Main wrapper ─────────────────────────────────────────────── -->
+    <div class="main-wrapper">
+
+        <!-- Topbar -->
+        <header class="top-navbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="sidebar-toggle-btn" id="sidebarToggle" title="Menú">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="h5 mb-0 fw-bold text-dark d-none d-sm-block">Sistema ERP</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-link text-muted p-2" title="Notificaciones">
+                    <i class="bi bi-bell"></i>
+                </button>
+                <div class="vr"></div>
+                <form asp-controller="Home" asp-action="Logout" method="post" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold">
+                        <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="content-body">
+            @RenderBody()
+        </main>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('sidebarToggle')?.addEventListener('click', function () {
+            document.getElementById('sidebar')?.classList.toggle('open');
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

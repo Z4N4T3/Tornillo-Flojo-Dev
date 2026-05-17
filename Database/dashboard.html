@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Autopartes El Tornillo Flojo - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Work+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#f7be1d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#233144",
+                        "secondary-fixed-dim": "#ffb59f",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#5a4300",
+                        "on-secondary-container": "#6b1a00",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#ffa488",
+                        "surface-variant": "#d5e3fc",
+                        "tertiary-fixed-dim": "#ffb59e",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#251a00",
+                        "on-tertiary-container": "#813116",
+                        "surface-container-highest": "#d5e3fc",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#e6eeff",
+                        "primary": "#785a00",
+                        "on-primary-container": "#604700",
+                        "primary-fixed": "#ffdf9a",
+                        "surface-container-high": "#dce9ff",
+                        "secondary-container": "#fb7b54",
+                        "on-surface": "#0d1c2e",
+                        "surface-dim": "#ccdbf3",
+                        "on-tertiary-fixed": "#3a0b00",
+                        "surface": "#f8f9ff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#3a0a00",
+                        "on-background": "#0d1c2e",
+                        "inverse-primary": "#f7be1d",
+                        "outline-variant": "#d3c5ac",
+                        "outline": "#817660",
+                        "background": "#f8f9ff",
+                        "primary-container": "#eab308",
+                        "tertiary": "#9b4427",
+                        "secondary-fixed": "#ffdbd1",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed-variant": "#842503",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-tertiary-fixed-variant": "#7c2d12",
+                        "secondary": "#a53c19",
+                        "surface-tint": "#785a00",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-surface-variant": "#4f4633",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "margin": "32px",
+                        "xs": "4px",
+                        "xl": "40px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["Inter"],
+                        "headline-sm": ["Work Sans"],
+                        "headline-xl": ["Work Sans"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Work Sans"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "data-mono": ["14px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-sm": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="bg-slate-900 dark:bg-black font-sans tracking-tight text-sm fixed h-full w-[260px] left-0 top-0 z-50 border-r border-slate-800 shadow-none flex flex-col py-6 hidden md:flex">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+<span class="material-symbols-outlined text-yellow-500 fill-icon">settings</span>
+</div>
+<div>
+<h1 class="text-yellow-500 font-black tracking-widest uppercase text-sm">Tornillo Flojo</h1>
+<p class="text-slate-400 text-xs">Granada, Nicaragua</p>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 px-4 flex-grow">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md bg-slate-800 text-yellow-500 border-l-4 border-yellow-500 font-semibold transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span>New Sale/POS</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Inventory</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Cashier</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors duration-200 ease-in-out scale-100 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</li>
+</ul>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3 pt-6 border-t border-slate-800">
+<img alt="El Tornillo Flojo Corporate Logo" class="w-8 h-8 rounded-full border border-slate-700 object-cover" data-alt="A professional headshot of an older male administrator in a brightly lit industrial office, looking directly at the camera with a warm, confident expression. The lighting is soft and natural, creating a clean, modern aesthetic. The color palette is composed of warm earth tones, consistent with a colonial architecture inspired design system, featuring subtle yellows and rich terracottas. The mood is trustworthy and experienced, perfect for an ERP system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKWhLWVf04HIpmp2_63XpSn_mK3QaiH57Yy8CAPiJ9OIVrkDEHMw8sNdNJH7XiJjBR2y4ojWMkW9H1ei89ze6XPR126GGbI6GbTuK7p-K72wmb9pGCEjgZ7EjyoD7LdWgFjgMRRsTKqBF-Qq3Hxma9CH6J9nT7mxHPrhFKX4KSxanfwbg7nayau409O6-UJim7HECOoDGSZtRq8yl1KR9diSNTDs_ikuyQCivvp1BO3DNwsdbnreqLYqvOEy_jM_QBdBnsrn21ZVI"/>
+<div class="text-sm">
+<p class="text-white font-medium">Administrator</p>
+<p class="text-slate-400 text-xs">Admin</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-0 md:ml-[260px] flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-white/90 dark:bg-slate-950/90 backdrop-blur-md font-sans text-base docked full-width top-0 sticky z-40 border-b border-stone-200 dark:border-slate-800 flat no shadows flex justify-between items-center h-16 px-8">
+<div class="flex items-center gap-4">
+<h2 class="text-slate-900 dark:text-white font-bold text-lg hidden md:block">ERP System</h2>
+<!-- Search Bar -->
+<div class="relative hidden sm:block w-64 ml-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-stone-300 rounded-md text-sm focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 focus:outline-none transition-all placeholder-stone-400" placeholder="Buscar..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1">
+<button class="p-2 text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-slate-900 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-slate-900 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="p-2 text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-slate-900 rounded-md transition-all cursor-pointer focus:ring-2 focus:ring-yellow-500">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<div class="h-6 w-px bg-stone-300 mx-2"></div>
+<button class="px-4 py-2 text-sm font-medium text-stone-700 bg-white border border-stone-300 rounded-md hover:bg-stone-50 transition-colors">Support</button>
+<button class="px-4 py-2 text-sm font-medium text-slate-900 bg-yellow-500 rounded-md hover:bg-yellow-400 transition-colors">New Sale</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-8">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Welcome Section -->
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">¡Hola, Administrador! Aquí tienes el resumen de hoy.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Revisa las métricas clave y accede a las herramientas principales.</p>
+</div>
+<!-- Quick Access Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<button class="group flex flex-col p-6 bg-surface-container-lowest border border-stone-200 rounded-xl hover:border-yellow-500 hover:shadow-[0_8px_30px_rgb(154,52,18,0.08)] transition-all text-left">
+<div class="w-12 h-12 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4 group-hover:bg-yellow-500/20 transition-colors">
+<span class="material-symbols-outlined text-yellow-600 text-2xl" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Realizar Venta</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Acceso rápido al punto de venta.</p>
+</button>
+<button class="group flex flex-col p-6 bg-surface-container-lowest border border-stone-200 rounded-xl hover:border-yellow-500 hover:shadow-[0_8px_30px_rgb(154,52,18,0.08)] transition-all text-left">
+<div class="w-12 h-12 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4 group-hover:bg-yellow-500/20 transition-colors">
+<span class="material-symbols-outlined text-yellow-600 text-2xl" data-icon="inventory_2">inventory_2</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Ingresar Mercadería</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Registrar nuevos lotes de repuestos.</p>
+</button>
+<button class="group flex flex-col p-6 bg-surface-container-lowest border border-stone-200 rounded-xl hover:border-yellow-500 hover:shadow-[0_8px_30px_rgb(154,52,18,0.08)] transition-all text-left">
+<div class="w-12 h-12 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4 group-hover:bg-yellow-500/20 transition-colors">
+<span class="material-symbols-outlined text-yellow-600 text-2xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Arqueo de Caja</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cierre de turno y revisión de efectivo.</p>
+</button>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="p-5 bg-surface-container-lowest border border-stone-200 rounded-lg flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Ventas del Día</p>
+<span class="material-symbols-outlined text-stone-400 text-sm">trending_up</span>
+</div>
+<p class="font-data-mono text-data-mono text-2xl text-on-surface font-semibold">142</p>
+<p class="font-body-sm text-body-sm text-green-600 mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12% vs ayer</p>
+</div>
+<div class="p-5 bg-surface-container-lowest border border-stone-200 rounded-lg flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Repuestos Bajo Stock</p>
+<span class="material-symbols-outlined text-error text-sm">warning</span>
+</div>
+<p class="font-data-mono text-data-mono text-2xl text-on-surface font-semibold">28</p>
+<p class="font-body-sm text-body-sm text-error mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> 5 críticos</p>
+</div>
+<div class="p-5 bg-surface-container-lowest border border-stone-200 rounded-lg flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Clientes Atendidos</p>
+<span class="material-symbols-outlined text-stone-400 text-sm">group</span>
+</div>
+<p class="font-data-mono text-data-mono text-2xl text-on-surface font-semibold">89</p>
+<p class="font-body-sm text-body-sm text-stone-500 mt-2 flex items-center gap-1">En mostrador</p>
+</div>
+<div class="p-5 bg-surface-container-lowest border border-stone-200 rounded-lg flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Ingresos Totales</p>
+<span class="material-symbols-outlined text-stone-400 text-sm">payments</span>
+</div>
+<p class="font-data-mono text-data-mono text-2xl text-tertiary font-semibold">C$ 45,200</p>
+<p class="font-body-sm text-body-sm text-green-600 mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 8% vs semana pasada</p>
+</div>
+</div>
+<!-- Analytics Section -->
+<div class="bg-surface-container-lowest border border-stone-200 rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Rendimiento de Ventas de la Semana</h3>
+<button class="px-3 py-1.5 text-sm border border-stone-300 rounded text-stone-600 hover:bg-stone-50 flex items-center gap-2">
+<span>Esta Semana</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<!-- Faux Chart Area -->
+<div class="h-64 flex items-end justify-between gap-2 pt-8 border-b border-stone-200 pb-2 relative">
+<!-- Y-axis labels -->
+<div class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-xs text-stone-400 w-10">
+<span>100k</span>
+<span>75k</span>
+<span>50k</span>
+<span>25k</span>
+<span>0</span>
+</div>
+<!-- Grid lines -->
+<div class="absolute left-12 right-0 top-0 bottom-8 flex flex-col justify-between z-0 pointer-events-none">
+<div class="w-full h-px bg-stone-100"></div>
+<div class="w-full h-px bg-stone-100"></div>
+<div class="w-full h-px bg-stone-100"></div>
+<div class="w-full h-px bg-stone-100"></div>
+</div>
+<!-- Bars -->
+<div class="w-full flex justify-around items-end h-full z-10 pl-12">
+<div class="flex flex-col items-center gap-2 w-1/8 group">
+<div class="w-12 bg-yellow-400 rounded-t-sm h-[40%] group-hover:bg-yellow-500 transition-colors relative"></div>
+<span class="text-xs text-stone-500 font-medium">Lun</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-1/8 group">
+<div class="w-12 bg-yellow-400 rounded-t-sm h-[65%] group-hover:bg-yellow-500 transition-colors"></div>
+<span class="text-xs text-stone-500 font-medium">Mar</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-1/8 group">
+<div class="w-12 bg-yellow-400 rounded-t-sm h-[85%] group-hover:bg-yellow-500 transition-colors"></div>
+<span class="text-xs text-stone-500 font-medium">Mié</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-1/8 group">
+<div class="w-12 bg-tertiary/80 rounded-t-sm h-[50%] group-hover:bg-tertiary transition-colors"></div>
+<span class="text-xs text-stone-500 font-medium">Jue</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-1/8 group">
+<div class="w-12 bg-yellow-400 rounded-t-sm h-[90%] group-hover:bg-yellow-500 transition-colors"></div>
+<span class="text-xs text-stone-500 font-medium">Vie</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-1/8 group">
+<div class="w-12 bg-yellow-400 rounded-t-sm h-[70%] group-hover:bg-yellow-500 transition-colors"></div>
+<span class="text-xs text-stone-500 font-medium">Sáb</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
