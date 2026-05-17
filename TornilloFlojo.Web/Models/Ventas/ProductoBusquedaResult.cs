@@ -6,4 +6,5 @@ public class ProductoBusquedaResult
     public string Nombre { get; set; } = string.Empty;
     public decimal PrecioVenta { get; set; }
     public int StockActual { get; set; }
+    public int? IdCategoria { get; set; }
 }

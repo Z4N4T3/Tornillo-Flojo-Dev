@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Dapper;
 using TornilloFlojo.Web.Models.Ventas;
+using TornilloFlojo.Web.Models;
 namespace TornilloFlojo.Web.Controllers
 {
     [Authorize]
@@ -14,12 +15,23 @@ namespace TornilloFlojo.Web.Controllers
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
         }
-        public IActionResult NuevaVenta()
+        public async Task<IActionResult> NuevaVenta()
         {
             return View();
         }
+
         [HttpGet]
-        public async Task<IActionResult> BuscarProducto(string q, int? idSucursal)
+        public async Task<IActionResult> GetCategorias()
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var categorias = await connection.QueryAsync<CategoriaDto>(
+                "SELECT id AS Id, nombre AS Nombre FROM producto_categoria ORDER BY nombre"
+            );
+            return Json(categorias);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarProducto(string q, int? idSucursal, int? idCategoria)
         {
             if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
                 return Json(new List<ProductoBusquedaResult>());

@@ -1,0 +1,217 @@
+@model TornilloFlojo.Web.Models.InventarioViewModel
+@{
+    ViewData["Title"] = "Catálogo e Inventario";
+    Layout = "_AdminLayout";
+    
+    var isAdmin = User.IsInRole("Administrador Global") || User.IsInRole("Administrador Local");
+}
+
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="mb-1">Catálogo e Inventario</h2>
+        <p class="text-muted mb-0">Gestiona los repuestos, existencias y alertas de stock.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="ExportarCSV" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-file-earmark-excel"></i> Exportar CSV
+        </a>
+        <button type="button" class="btn btn-warning d-flex align-items-center gap-2 text-dark fw-bold" onclick="abrirModalProducto()">
+            <i class="bi bi-plus-circle"></i> Nuevo Producto
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Panel Lateral: Filtros -->
+    <div class="col-12 col-md-3">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h5 class="card-title fs-6 fw-bold mb-3"><i class="bi bi-funnel"></i> Búsqueda</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-white text-muted border-end-0">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="busquedaTexto" class="form-control border-start-0" placeholder="Código, nombre o marca...">
+                </div>
+                
+                <h5 class="card-title fs-6 fw-bold mb-3 mt-4"><i class="bi bi-tags"></i> Categorías</h5>
+                <ul class="list-group list-group-flush" id="listaCategorias">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0">
+                        <a href="#" class="text-decoration-none text-dark fw-semibold btn-filtro-categoria active" data-id="">
+                            Todas las categorías
+                        </a>
+                        <span class="badge bg-light text-dark rounded-pill border">@Model.Productos.Count</span>
+                    </li>
+                    @foreach (var cat in Model.Categorias)
+                    {
+                        var count = Model.Productos.Count(p => p.IdCategoria == cat.Id);
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0">
+                            <a href="#" class="text-decoration-none text-muted btn-filtro-categoria" data-id="@cat.Id">
+                                @cat.Nombre
+                            </a>
+                            <span class="badge bg-light text-muted rounded-pill">@count</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla Principal -->
+    <div class="col-12 col-md-9">
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="tablaInventario">
+                    <thead class="table-light text-muted small text-uppercase">
+                        <tr>
+                            <th class="ps-4">Código</th>
+                            <th>Producto</th>
+                            <th>Marca</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prod in Model.Productos)
+                        {
+                            <tr data-categoria="@prod.IdCategoria" class="producto-fila">
+                                <td class="ps-4 fw-semibold text-muted">@prod.CodigoParte</td>
+                                <td>
+                                    <div class="fw-bold text-dark nombre-producto">@prod.Nombre</div>
+                                    @if (prod.AlertaStock)
+                                    {
+                                        <span class="badge bg-danger rounded-pill fw-normal" style="font-size: 0.7rem;"><i class="bi bi-exclamation-triangle"></i> STOCK BAJO</span>
+                                    }
+                                </td>
+                                <td class="marca-producto">@prod.MarcaNombre</td>
+                                <td><span class="badge bg-light text-dark border">@prod.CategoriaNombre</span></td>
+                                <td class="fw-semibold text-success">C$ @prod.PrecioVenta.ToString("N2")</td>
+                                <td>
+                                    @if (prod.StockActual <= prod.StockMinimo)
+                                    {
+                                        <span class="text-danger fw-bold">@prod.StockActual</span> <span class="text-muted small">/ @prod.StockMinimo min</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-dark">@prod.StockActual</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-light text-primary me-1" onclick="abrirModalProducto(@prod.Id)" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    @if (isAdmin)
+                                    {
+                                        <button class="btn btn-sm btn-light text-danger" onclick="eliminarProducto(@prod.Id, '@prod.Nombre')" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (!Model.Productos.Any())
+            {
+                <div class="p-5 text-center text-muted">
+                    <i class="bi bi-box-seam fs-1 d-block mb-3"></i>
+                    <h5>No hay productos registrados</h5>
+                    <p>Agrega productos al catálogo para comenzar a gestionar el inventario.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal Producto -->
+<div class="modal fade" id="productoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="modalTitle">Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmProducto">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="Id" name="Id" />
+                    
+                    <div id="modalError" class="alert alert-danger d-none"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small text-muted">Código de Parte <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="CodigoParte" name="CodigoParte" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold small text-muted">Nombre del Producto <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="Nombre" name="Nombre" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Marca</label>
+                            <select class="form-select" id="IdMarca" name="IdMarca">
+                                <option value="">-- Seleccionar Marca --</option>
+                                @foreach (var m in Model.Marcas)
+                                {
+                                    <option value="@m.Id">@m.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Categoría</label>
+                            <select class="form-select" id="IdCategoria" name="IdCategoria">
+                                <option value="">-- Seleccionar Categoría --</option>
+                                @foreach (var c in Model.Categorias)
+                                {
+                                    <option value="@c.Id">@c.Nombre</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Precio de Costo</label>
+                            <div class="input-group">
+                                <span class="input-group-text">C$</span>
+                                <input type="number" step="0.01" class="form-control" id="PrecioCosto" name="PrecioCosto">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small text-muted">Precio de Venta <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">C$</span>
+                                <input type="number" step="0.01" class="form-control" id="PrecioVenta" name="PrecioVenta" required>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small text-muted">Descripción</label>
+                            <textarea class="form-control" id="Descripcion" name="Descripcion" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="col-12" id="estadoContainer" style="display:none;">
+                            <label class="form-label fw-semibold small text-muted">Estado</label>
+                            <select class="form-select" id="IdEstado" name="IdEstado">
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning fw-bold text-dark" id="btnGuardar" onclick="guardarProducto()">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/inventario.js"></script>
+}

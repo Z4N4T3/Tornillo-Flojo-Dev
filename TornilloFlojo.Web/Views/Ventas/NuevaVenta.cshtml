@@ -29,12 +29,9 @@
                     </div>
                     
                     
-                    <div class="d-flex gap-2 mt-3 overflow-auto" style="white-space: nowrap; scrollbar-width: none;">
-                        <button class="btn btn-sm btn-dark rounded-pill px-3">Todos</button>
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Frenos</button>
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Suspensión</button>
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Motor</button>
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Eléctrico</button>
+                    <div class="d-flex gap-2 mt-3 overflow-auto" id="categoriasFilter" style="white-space: nowrap; scrollbar-width: none;">
+                        <button class="btn btn-sm btn-dark rounded-pill px-3 btn-cat-filter active" data-cat-id="" onclick="pos.filtrarPorCategoria(this, '')">Todos</button>
+                        <!-- Se carga dinámicamente desde /Ventas/GetCategorias -->
                     </div>
                 </div>
 

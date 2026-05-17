@@ -66,6 +66,11 @@ public class HomeController : Controller
     {
         return View();
     }
+    [Authorize]
+    public IActionResult Proximamente()
+    {
+        return View();
+    }
     [AllowAnonymous]
     public IActionResult AccessDenied()
     {

@@ -14,6 +14,8 @@ const pos = (function () {
     let clienteSeleccionado = { id: 1, nombre: 'Consumidor Final' }; // Default
     const IVA_RATE = 0.15;
     let searchTimeout = null;
+    let categoriaSeleccionada = ''; // '' = Todas
+    let productosCache = []; // Cache de la última búsqueda para filtro de categoría
 
     // ── Cache de elementos del DOM ────────────────────────────────────────
     const ui = {
@@ -60,6 +62,9 @@ const pos = (function () {
             });
         }
 
+        // Cargar categorías dinámicamente al iniciar
+        cargarCategorias();
+
         actualizarUI();
     });
 
@@ -67,8 +72,69 @@ const pos = (function () {
     //  BÚSQUEDA DE PRODUCTOS (AJAX → Backend)
     // ══════════════════════════════════════════════════════════════════════
 
+    // ── Carga Dinámica de Categorías ─────────────────────────────────────
+    async function cargarCategorias() {
+        try {
+            const resp = await fetch('/Ventas/GetCategorias');
+            if (!resp.ok) return;
+            const categorias = await resp.json();
+            const container = document.getElementById('categoriasFilter');
+            if (!container) return;
+
+            categorias.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-sm btn-outline-secondary rounded-pill px-3 btn-cat-filter';
+                btn.textContent = cat.nombre;
+                btn.dataset.catId = cat.id;
+                btn.onclick = function() { filtrarPorCategoria(this, cat.id); };
+                container.appendChild(btn);
+            });
+        } catch (err) {
+            console.error('Error cargando categorías:', err);
+        }
+    }
+
+    function filtrarPorCategoria(btn, catId) {
+        categoriaSeleccionada = catId === '' ? '' : String(catId);
+
+        // Actualizar UI de botones
+        document.querySelectorAll('.btn-cat-filter').forEach(b => {
+            b.classList.remove('btn-dark', 'active');
+            b.classList.add('btn-outline-secondary');
+        });
+        btn.classList.remove('btn-outline-secondary');
+        btn.classList.add('btn-dark', 'active');
+
+        // Re-filtrar productos del cache
+        renderProductosFiltrados();
+    }
+
+    function renderProductosFiltrados() {
+        if (!ui.productosGrid) return;
+        if (productosCache.length === 0) {
+            renderProductosVacio();
+            return;
+        }
+
+        const filtrados = categoriaSeleccionada === ''
+            ? productosCache
+            : productosCache.filter(p => String(p.idCategoria) === categoriaSeleccionada);
+
+        if (filtrados.length === 0) {
+            ui.productosGrid.innerHTML = `
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="bi bi-funnel" style="font-size: 2.5rem;"></i>
+                    <p class="mt-2">No hay productos en esta categoría</p>
+                </div>`;
+            return;
+        }
+
+        ui.productosGrid.innerHTML = filtrados.map(p => crearTarjetaProducto(p)).join('');
+    }
+
     async function buscarProductos(query) {
         if (!query || query.length < 2) {
+            productosCache = [];
             renderProductosVacio();
             return;
         }
@@ -79,6 +145,7 @@ const pos = (function () {
             const productos = await resp.json();
 
             if (!ui.productosGrid) return;
+            productosCache = productos;
 
             if (productos.length === 0) {
                 ui.productosGrid.innerHTML = `
@@ -89,7 +156,7 @@ const pos = (function () {
                 return;
             }
 
-            ui.productosGrid.innerHTML = productos.map(p => crearTarjetaProducto(p)).join('');
+            renderProductosFiltrados();
         } catch (err) {
             console.error('Error buscando productos:', err);
         }
@@ -403,6 +470,7 @@ const pos = (function () {
         procesarPago,
         seleccionarCliente,
         buscarProductos,
-        buscarClientes
+        buscarClientes,
+        filtrarPorCategoria
     };
 })();

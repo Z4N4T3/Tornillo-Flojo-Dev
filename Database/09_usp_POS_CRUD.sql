@@ -8,10 +8,10 @@ BEGIN
     SET NOCOUNT ON;
     
     SELECT TOP 20 
-        id, 
-        LTRIM(RTRIM(nombre1 + ' ' + ISNULL(nombre2 + ' ', '') + apellido1 + ' ' + ISNULL(apellido2, ''))) AS nombre_completo,
-        identificacion,
-        telefono
+        id                                                                                           AS Id, 
+        LTRIM(RTRIM(nombre1 + ' ' + ISNULL(nombre2 + ' ', '') + apellido1 + ' ' + ISNULL(apellido2, ''))) AS NombreCompleto,
+        identificacion                                                                               AS Identificacion,
+        telefono                                                                                     AS Telefono
     FROM cliente
     WHERE 
         identificacion LIKE '%' + @busqueda + '%' OR
@@ -29,11 +29,12 @@ BEGIN
     SET NOCOUNT ON;
     
     SELECT TOP 50
-        p.id,
-        p.codigo_parte,
-        p.nombre,
-        p.precio_venta,
-        inv.stock_actual
+        p.id                AS Id,
+        p.codigo_parte      AS CodigoParte,
+        p.nombre            AS Nombre,
+        p.precio_venta      AS PrecioVenta,
+        inv.stock_actual    AS StockActual,
+        p.id_categoria      AS IdCategoria
     FROM producto p
     INNER JOIN inventario_sucursal inv ON p.id = inv.id_producto
     WHERE 

@@ -137,7 +137,7 @@
     
     <nav class="sidebar" id="sidebar">
 
-        <a class="sidebar-brand" href="#">
+        <a class="sidebar-brand" asp-controller="Dashboard" asp-action="Index">
             <i class="bi bi-gear-fill"></i>
             <div>
                 <h1>Tornillo Flojo</h1>
@@ -161,7 +161,8 @@
                 </a>
             </li>
             <li>
-                <a class="sidebar-link" href="#">
+                <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventario" ? "active" : "")"
+                   asp-controller="Inventario" asp-action="Index">
                     <i class="bi bi-box-seam"></i>
                     <span>Inventario</span>
                 </a>
@@ -179,7 +180,7 @@
             }
 
             <li>
-                <a class="sidebar-link" href="#">
+                <a class="sidebar-link" asp-controller="Home" asp-action="Proximamente">
                     <i class="bi bi-sliders"></i>
                     <span>Ajustes</span>
                 </a>
