@@ -154,7 +154,8 @@
                 </a>
             </li>
             <li>
-                <a class="sidebar-link" href="#">
+                <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Ventas" ? "active" : "")"
+                   asp-controller="Ventas" asp-action="NuevaVenta">
                     <i class="bi bi-cart3"></i>
                     <span>Nueva Venta / POS</span>
                 </a>

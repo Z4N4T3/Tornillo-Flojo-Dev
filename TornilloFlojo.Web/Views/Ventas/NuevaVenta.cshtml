@@ -1,0 +1,149 @@
+@{
+    ViewData["Title"] = "Nueva Venta (POS)";
+    Layout = "_AdminLayout";
+}
+
+@* ── Token CSRF requerido por el POST de ProcesarVenta ──────────────── *@
+@Html.AntiForgeryToken()
+
+<div class="container-fluid h-100" style="min-height: calc(100vh - 130px);">
+    <div class="row h-100 g-3">
+        
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- Columna Izquierda: Búsqueda y Productos (70%)                 -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="col-12 col-lg-8 d-flex flex-column">
+            <div class="card shadow-sm border-0 flex-grow-1 d-flex flex-column h-100" style="background-color: var(--surface-container-lowest);">
+                
+                <!-- Buscador y Filtros -->
+                <div class="card-header bg-white border-bottom p-3">
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" class="form-control border-start-0" id="searchProductos"
+                                   placeholder="Buscar repuestos, códigos o marcas..." autocomplete="off">
+                        </div>
+                        <button class="btn btn-outline-secondary d-flex align-items-center gap-2 text-nowrap">
+                            <i class="bi bi-funnel"></i> Filtros
+                        </button>
+                    </div>
+                    
+                    <!-- Filtros Rápidos -->
+                    <div class="d-flex gap-2 mt-3 overflow-auto" style="white-space: nowrap; scrollbar-width: none;">
+                        <button class="btn btn-sm btn-dark rounded-pill px-3">Todos</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Frenos</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Suspensión</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Motor</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">Eléctrico</button>
+                    </div>
+                </div>
+
+                <!-- Grilla de Productos (se llena dinámicamente via AJAX) -->
+                <div class="card-body bg-light overflow-auto p-3 flex-grow-1">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3" id="productosGrid">
+                        <div class="col-12 text-center text-muted py-5">
+                            <i class="bi bi-box-seam" style="font-size: 2.5rem;"></i>
+                            <p class="mt-2">Escriba al menos 2 caracteres para buscar productos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- Columna Derecha: Carrito de Compras (30%)                     -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="col-12 col-lg-4 d-flex flex-column mt-3 mt-lg-0">
+            <div class="card shadow-sm border-0 h-100 d-flex flex-column" style="background-color: var(--surface-container-lowest);">
+                
+                <!-- Cabecera del Carrito -->
+                <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 d-flex align-items-center gap-2 fw-bold" style="color: var(--text);">
+                        <i class="bi bi-cart3" style="color: var(--gold);"></i> Venta Actual
+                    </h5>
+                    <span class="badge bg-light text-dark border font-monospace text-muted">#V-NUEVA</span>
+                </div>
+
+                <!-- Selección de Cliente -->
+                <div class="p-3 bg-white border-bottom">
+                    <label class="form-label fw-semibold small text-muted mb-1">
+                        <i class="bi bi-person-fill me-1"></i>Cliente
+                    </label>
+                    <div class="position-relative">
+                        <input type="text" class="form-control form-control-sm" id="searchCliente"
+                               placeholder="Buscar cliente..." autocomplete="off">
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <i class="bi bi-person-check text-success"></i>
+                        <small class="text-muted" id="clienteNombreDisplay">Consumidor Final</small>
+                    </div>
+                </div>
+
+                <!-- Lista de Productos en el Carrito -->
+                <div class="card-body p-2 bg-light flex-grow-1 overflow-auto" id="carritoItems" style="min-height: 200px;">
+                    <div class="text-center text-muted mt-5" id="carritoVacioMsg">
+                        <i class="bi bi-cart-x" style="font-size: 3rem;"></i>
+                        <p class="mt-2">El carrito está vacío</p>
+                    </div>
+                </div>
+
+                <!-- Totales y Acciones -->
+                <div class="card-footer bg-white border-top p-3 rounded-bottom">
+                    <div class="d-flex justify-content-between mb-2 text-muted small">
+                        <span>Subtotal</span>
+                        <span class="font-monospace" id="cartSubtotal">C$ 0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 text-muted small">
+                        <span>IVA (15%)</span>
+                        <span class="font-monospace" id="cartTax">C$ 0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 pt-2 border-top">
+                        <span class="fw-bold">Total</span>
+                        <span class="fs-4 fw-bold" style="color: #9A3412;" id="cartTotal">C$ 0.00</span>
+                    </div>
+
+                    <div class="d-flex flex-column gap-2 mt-3">
+                        <button class="btn w-100 fw-bold d-flex justify-content-center align-items-center gap-2 text-dark"
+                                style="background-color: var(--gold);" id="btnProcesarPago" disabled
+                                onclick="pos.procesarPago()">
+                            <i class="bi bi-cash-coin"></i> Procesar Pago
+                        </button>
+                        <button class="btn btn-outline-danger w-100 text-uppercase fw-semibold"
+                                style="font-size: 0.85rem;" id="btnCancelarVenta"
+                                onclick="pos.vaciarCarrito()">
+                            Cancelar Venta
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/pos.js" asp-append-version="true"></script>
+    <style>
+        .product-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            border-color: var(--gold) !important;
+            box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+        }
+        /* Ocultar barra de scroll en navegadores webkit (Filtros) */
+        .overflow-auto::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .overflow-auto::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        /* Dropdown de clientes */
+        #clienteDropdown .list-group-item:hover {
+            background-color: #FEF9C3;
+        }
+    </style>
+}
